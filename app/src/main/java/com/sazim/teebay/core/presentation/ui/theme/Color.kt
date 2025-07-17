@@ -1,4 +1,4 @@
-package com.sazim.teebay.ui.theme
+package com.sazim.teebay.core.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
