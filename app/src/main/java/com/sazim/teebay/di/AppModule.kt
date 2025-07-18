@@ -3,6 +3,7 @@ package com.sazim.teebay.di
 import com.sazim.teebay.auth.data.FcmTokenProvider
 import com.sazim.teebay.auth.data.FcmTokenProviderImpl
 import com.sazim.teebay.auth.domain.usecase.LoginUseCase
+import com.sazim.teebay.auth.domain.usecase.SignUpUseCase
 import com.sazim.teebay.auth.presentation.AuthViewModel
 import com.sazim.teebay.core.data.remote.ApiConfig
 import org.koin.core.module.dsl.viewModel
@@ -16,7 +17,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 
 val appModule = module {
     //ViewModels
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {
@@ -31,4 +32,5 @@ val appModule = module {
 
     //use cases
     factory { LoginUseCase(get()) }
+    factory { SignUpUseCase(get()) }
 }

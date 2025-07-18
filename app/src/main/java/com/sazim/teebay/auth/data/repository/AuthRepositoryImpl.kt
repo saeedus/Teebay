@@ -9,6 +9,7 @@ import com.sazim.teebay.auth.data.dto.AuthResponseDto
 import com.sazim.teebay.auth.data.utils.toDomain
 import com.sazim.teebay.auth.domain.model.AuthRequest
 import com.sazim.teebay.auth.domain.model.AuthResponse
+import com.sazim.teebay.auth.domain.model.SignUpRequest
 import com.sazim.teebay.auth.domain.repository.AuthRepository
 import com.sazim.teebay.core.data.remote.ApiConfig
 import com.sazim.teebay.core.data.repository.BaseRepository
@@ -34,4 +35,14 @@ class AuthRepositoryImpl(
             transform = { it.toDomain() }
         )
     }
+
+    override suspend fun signUp(request: SignUpRequest): Flow<DataResult<AuthResponse, DataError.Network>> =
+        makeApiRequest<AuthResponseDto, AuthResponse>(
+            method = HttpMethod.Post,
+            endpoint = "users/register/",
+            requestBody = request.copy(
+                firebaseConsoleManagerToken = fcmTokenProvider.getToken().orEmpty()
+            ),
+            transform = { it.toDomain() }
+        )
 }

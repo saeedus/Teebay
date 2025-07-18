@@ -7,7 +7,9 @@ package com.sazim.teebay.auth.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sazim.teebay.auth.domain.model.SignUpRequest
 import com.sazim.teebay.auth.domain.usecase.LoginUseCase
+import com.sazim.teebay.auth.domain.usecase.SignUpUseCase
 import com.sazim.teebay.core.domain.DataResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -92,6 +95,32 @@ class AuthViewModel(
     }
 
     private fun register() {
-        //TODO
+        _state.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            signUpUseCase(
+                SignUpRequest(
+                    email = state.value.email,
+                    password = state.value.password,
+                    firstName = state.value.firstName,
+                    lastName = state.value.lastName,
+                    address = state.value.address,
+                    firebaseConsoleManagerToken = "" // This will be replaced by the FcmTokenProvider in the repository
+                )
+            ).collect { result ->
+                when (result) {
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false) }
+                        Log.d("SIGNUP", "signup: ${result.error}")
+                    }
+
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false) }
+//                        _uiEvent.send(AuthEvents.NavigateToHome)
+                        Log.d("SIGNUP", "signup: ${result.data}")
+                    }
+                }
+            }
+        }
     }
 }
