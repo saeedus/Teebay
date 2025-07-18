@@ -4,11 +4,11 @@
 
 package com.sazim.teebay.auth.data.utils
 
-import com.sazim.teebay.auth.data.dto.AuthResponseDto
-import com.sazim.teebay.auth.domain.model.AuthResponse
+import com.sazim.teebay.auth.data.dto.LoginResponseDto
+import com.sazim.teebay.auth.domain.model.LoginResponse
 
-fun AuthResponseDto.toDomain(): AuthResponse {
-    return AuthResponse(
+fun LoginResponseDto.toDomain(): LoginResponse {
+    return LoginResponse(
         email = email,
         password = password,
         fcmToken = fcmToken
