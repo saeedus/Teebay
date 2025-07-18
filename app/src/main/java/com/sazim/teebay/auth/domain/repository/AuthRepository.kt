@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 interface AuthRepository {
     suspend fun signIn(
         email: String,
-        password: String,
-        fcmToken: String
+        password: String
     ): Flow<DataResult<AuthResponse, DataError.Network>>
 }

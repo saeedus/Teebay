@@ -119,7 +119,13 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { /* TODO Handle login/registration */ },
+            onClick = {
+                if (state.isLogin) {
+                    viewModel.onAction(UserAction.OnSignInTapped)
+                } else {
+                    viewModel.onAction(UserAction.OnSignUpTapped)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(if (state.isLogin) R.string.login else R.string.sign_up))

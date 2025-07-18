@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.auth.data.repository
 
+import com.sazim.teebay.auth.data.FcmTokenProvider
 import com.sazim.teebay.auth.data.dto.AuthResponseDto
 import com.sazim.teebay.auth.data.utils.toDomain
 import com.sazim.teebay.auth.domain.model.AuthRequest
@@ -19,17 +20,18 @@ import kotlinx.coroutines.flow.Flow
 
 class AuthRepositoryImpl(
     apiConfig: ApiConfig,
-    httpClient: HttpClient
+    httpClient: HttpClient,
+    private val fcmTokenProvider: FcmTokenProvider
 ) : BaseRepository(apiConfig, httpClient), AuthRepository {
     override suspend fun signIn(
         email: String,
-        password: String,
-        fcmToken: String
-    ): Flow<DataResult<AuthResponse, DataError.Network>> =
-        makeApiRequest<AuthResponseDto, AuthResponse>(
+        password: String
+    ): Flow<DataResult<AuthResponse, DataError.Network>> {
+        return makeApiRequest<AuthResponseDto, AuthResponse>(
             method = HttpMethod.Post,
             endpoint = "users/login",
-            requestBody = AuthRequest(email, password, fcmToken),
+            requestBody = AuthRequest(email, password, fcmTokenProvider.getToken().orEmpty()),
             transform = { it.toDomain() }
         )
+    }
 }

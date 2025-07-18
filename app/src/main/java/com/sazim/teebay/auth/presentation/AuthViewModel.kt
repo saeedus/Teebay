@@ -4,14 +4,21 @@
 
 package com.sazim.teebay.auth.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sazim.teebay.auth.domain.usecase.LoginUseCase
+import com.sazim.teebay.core.domain.DataResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
     val state = _state.asStateFlow()
@@ -33,9 +40,8 @@ class AuthViewModel : ViewModel() {
                 _state.update { it.copy(isLogin = false) }
             }
 
-            UserAction.OnSignInTapped -> {
-                _state.update { it.copy(isLogin = true) }
-            }
+            UserAction.OnSignInTapped -> login()
+
 
             is UserAction.OnFirstNameTyped -> {
                 _state.update { it.copy(firstName = action.firstName) }
@@ -55,6 +61,27 @@ class AuthViewModel : ViewModel() {
 
             is UserAction.OnConfirmPasswordTyped -> {
                 _state.update { it.copy(confirmPassword = action.confirmPassword) }
+            }
+        }
+    }
+
+    private fun login() {
+        _state.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            loginUseCase(state.value.email, state.value.password).collect { result ->
+                when (result) {
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false) }
+                        Log.d("LOGIN", "login: ${result.error}")
+                    }
+
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false) }
+//                        _uiEvent.send(AuthEvents.NavigateToHome)
+                        Log.d("LOGIN", "login: ${result.data}")
+                    }
+                }
             }
         }
     }
