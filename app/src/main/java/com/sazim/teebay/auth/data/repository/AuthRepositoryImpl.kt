@@ -29,7 +29,7 @@ class AuthRepositoryImpl(
     ): Flow<DataResult<AuthResponse, DataError.Network>> {
         return makeApiRequest<AuthResponseDto, AuthResponse>(
             method = HttpMethod.Post,
-            endpoint = "users/login",
+            endpoint = "users/login/",
             requestBody = AuthRequest(email, password, fcmTokenProvider.getToken().orEmpty()),
             transform = { it.toDomain() }
         )
