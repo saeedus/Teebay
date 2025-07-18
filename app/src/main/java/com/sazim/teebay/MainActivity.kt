@@ -2,7 +2,9 @@ package com.sazim.teebay
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sazim.teebay.auth.presentation.AuthActivity
 
 class MainActivity : ComponentActivity() {
@@ -17,5 +19,18 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent(this, AuthActivity::class.java))
         }
         finish()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Log.d("FCM", "Token: $token")
+        }
     }
 }
