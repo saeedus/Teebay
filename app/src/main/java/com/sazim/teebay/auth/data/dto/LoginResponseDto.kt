@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginResponseDto(
-    val email: String,
-    val password: String,
-    @SerialName("fcm_token") val fcmToken: String
+    val message: String,
+    val user: UserDto
 )
