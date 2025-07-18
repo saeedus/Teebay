@@ -4,12 +4,8 @@
 
 package com.sazim.teebay.auth.domain.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class LoginResponse(
     val email: String,
     val password: String,
-    @SerialName("fcm_token") val fcmToken: String
+    val fcmToken: String
 )

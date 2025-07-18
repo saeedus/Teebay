@@ -6,6 +6,7 @@ package com.sazim.teebay.auth.domain.repository
 
 import com.sazim.teebay.auth.domain.model.LoginResponse
 import com.sazim.teebay.auth.domain.model.SignUpRequest
+import com.sazim.teebay.auth.domain.model.SignUpResponse
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
 import kotlinx.coroutines.flow.Flow
@@ -18,5 +19,5 @@ interface AuthRepository {
 
     suspend fun signUp(
         request: SignUpRequest
-    ): Flow<DataResult<LoginResponse, DataError.Network>>
+    ): Flow<DataResult<SignUpResponse, DataError.Network>>
 }

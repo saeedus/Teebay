@@ -6,10 +6,12 @@ package com.sazim.teebay.auth.data.repository
 
 import com.sazim.teebay.auth.data.FcmTokenProvider
 import com.sazim.teebay.auth.data.dto.LoginResponseDto
+import com.sazim.teebay.auth.data.dto.SignUpResponseDto
 import com.sazim.teebay.auth.data.utils.toDomain
 import com.sazim.teebay.auth.domain.model.LoginRequest
 import com.sazim.teebay.auth.domain.model.LoginResponse
 import com.sazim.teebay.auth.domain.model.SignUpRequest
+import com.sazim.teebay.auth.domain.model.SignUpResponse
 import com.sazim.teebay.auth.domain.repository.AuthRepository
 import com.sazim.teebay.core.data.remote.ApiConfig
 import com.sazim.teebay.core.data.repository.BaseRepository
@@ -36,8 +38,8 @@ class AuthRepositoryImpl(
         )
     }
 
-    override suspend fun signUp(request: SignUpRequest): Flow<DataResult<LoginResponse, DataError.Network>> =
-        makeApiRequest<LoginResponseDto, LoginResponse>(
+    override suspend fun signUp(request: SignUpRequest): Flow<DataResult<SignUpResponse, DataError.Network>> =
+        makeApiRequest<SignUpResponseDto, SignUpResponse>(
             method = HttpMethod.Post,
             endpoint = "users/register/",
             requestBody = request.copy(
