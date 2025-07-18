@@ -138,9 +138,9 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
             actionText = stringResource(if (state.isLogin) R.string.sign_up else R.string.sign_in)
         ) {
             if (state.isLogin) {
-                viewModel.onAction(UserAction.OnSignUpTapped)
+                viewModel.onAction(UserAction.ShowSignUpForm)
             } else {
-                viewModel.onAction(UserAction.OnSignInTapped)
+                viewModel.onAction(UserAction.ShowSignInForm)
             }
         }
     }

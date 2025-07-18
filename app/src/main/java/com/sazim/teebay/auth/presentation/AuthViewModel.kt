@@ -36,12 +36,17 @@ class AuthViewModel(
                 _state.update { it.copy(password = action.password) }
             }
 
-            UserAction.OnSignUpTapped -> {
+            UserAction.ShowSignUpForm -> {
                 _state.update { it.copy(isLogin = false) }
+            }
+
+            UserAction.ShowSignInForm -> {
+                _state.update { it.copy(isLogin = true) }
             }
 
             UserAction.OnSignInTapped -> login()
 
+            UserAction.OnSignUpTapped -> register()
 
             is UserAction.OnFirstNameTyped -> {
                 _state.update { it.copy(firstName = action.firstName) }
@@ -84,5 +89,9 @@ class AuthViewModel(
                 }
             }
         }
+    }
+
+    private fun register() {
+        //TODO
     }
 }

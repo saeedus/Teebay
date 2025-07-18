@@ -7,8 +7,10 @@ package com.sazim.teebay.auth.presentation
 sealed interface UserAction {
     data class OnEmailTyped(val email: String) : UserAction
     data class OnPasswordTyped(val password: String) : UserAction
-    object OnSignUpTapped : UserAction
+    object ShowSignUpForm : UserAction
+    object ShowSignInForm : UserAction
     object OnSignInTapped : UserAction
+    object OnSignUpTapped : UserAction
     data class OnFirstNameTyped(val firstName: String) : UserAction
     data class OnLastNameTyped(val lastName: String) : UserAction
     data class OnAddressTyped(val address: String) : UserAction
