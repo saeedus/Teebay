@@ -28,6 +28,34 @@ class AuthViewModel : ViewModel() {
             is UserAction.OnPasswordTyped -> {
                 _state.update { it.copy(password = action.password) }
             }
+
+            UserAction.OnSignUpTapped -> {
+                _state.update { it.copy(isLogin = false) }
+            }
+
+            UserAction.OnSignInTapped -> {
+                _state.update { it.copy(isLogin = true) }
+            }
+
+            is UserAction.OnFirstNameTyped -> {
+                _state.update { it.copy(firstName = action.firstName) }
+            }
+
+            is UserAction.OnLastNameTyped -> {
+                _state.update { it.copy(lastName = action.lastName) }
+            }
+
+            is UserAction.OnAddressTyped -> {
+                _state.update { it.copy(address = action.address) }
+            }
+
+            is UserAction.OnPhoneNumberTyped -> {
+                _state.update { it.copy(phoneNumber = action.phoneNumber) }
+            }
+
+            is UserAction.OnConfirmPasswordTyped -> {
+                _state.update { it.copy(confirmPassword = action.confirmPassword) }
+            }
         }
     }
 }

@@ -14,28 +14,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.clickable
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.UrlAnnotation
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.R
 import com.sazim.teebay.auth.presentation.AuthState
@@ -51,9 +39,47 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = stringResource(R.string.sign_in), style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = stringResource(if (state.isLogin) R.string.sign_in else R.string.sign_up_title),
+            style = MaterialTheme.typography.titleMedium
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (!state.isLogin) {
+            InputField(
+                value = state.firstName,
+                onValueChange = { viewModel.onAction(UserAction.OnFirstNameTyped(it)) },
+                label = stringResource(id = R.string.first_name),
+                leadingIcon = Icons.Default.Person,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            InputField(
+                value = state.lastName,
+                onValueChange = { viewModel.onAction(UserAction.OnLastNameTyped(it)) },
+                label = stringResource(id = R.string.last_name),
+                leadingIcon = Icons.Default.Person,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            InputField(
+                value = state.address,
+                onValueChange = { viewModel.onAction(UserAction.OnAddressTyped(it)) },
+                label = stringResource(id = R.string.address),
+                leadingIcon = Icons.Default.Person, // Consider a more appropriate icon
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            InputField(
+                value = state.phoneNumber,
+                onValueChange = { viewModel.onAction(UserAction.OnPhoneNumberTyped(it)) },
+                label = stringResource(id = R.string.phone_number),
+                leadingIcon = Icons.Default.Phone,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         InputField(
             value = state.email,
@@ -78,17 +104,38 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
             visualTransformation = PasswordVisualTransformation()
         )
 
+        if (!state.isLogin) {
+            Spacer(modifier = Modifier.height(8.dp))
+            InputField(
+                value = state.confirmPassword,
+                onValueChange = { viewModel.onAction(UserAction.OnConfirmPasswordTyped(it)) },
+                label = stringResource(id = R.string.confirm_password),
+                leadingIcon = Icons.Default.Lock,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = PasswordVisualTransformation()
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /* TODO Handle login */ }, modifier = Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.login))
+        Button(
+            onClick = { /* TODO Handle login/registration */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = stringResource(if (state.isLogin) R.string.login else R.string.sign_up))
         }
 
         Spacer(Modifier.height(20.dp))
 
         AuthPrompt(
-            promptText = stringResource(R.string.dont_have_account),
-            actionText = stringResource(R.string.sign_up)
-        ) { }
+            promptText = stringResource(if (state.isLogin) R.string.dont_have_account else R.string.already_have_account),
+            actionText = stringResource(if (state.isLogin) R.string.sign_up else R.string.sign_in)
+        ) {
+            if (state.isLogin) {
+                viewModel.onAction(UserAction.OnSignUpTapped)
+            } else {
+                viewModel.onAction(UserAction.OnSignInTapped)
+            }
+        }
     }
 }
