@@ -5,7 +5,9 @@ import com.sazim.teebay.auth.data.FcmTokenProviderImpl
 import com.sazim.teebay.auth.domain.usecase.LoginUseCase
 import com.sazim.teebay.auth.domain.usecase.SignUpUseCase
 import com.sazim.teebay.auth.presentation.AuthViewModel
+import com.sazim.teebay.auth.data.local.SessionManagerImpl
 import com.sazim.teebay.core.data.remote.ApiConfig
+import com.sazim.teebay.auth.domain.local.SessionManager
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import com.sazim.teebay.BuildConfig
@@ -17,7 +19,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 
 val appModule = module {
     //ViewModels
-    viewModel { AuthViewModel(get(), get()) }
+    viewModel { AuthViewModel(get(), get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {
@@ -29,6 +31,9 @@ val appModule = module {
 
     //token provider
     single<FcmTokenProvider> { FcmTokenProviderImpl() }
+
+    //session manager
+    single<SessionManager> { SessionManagerImpl(get()) }
 
     //use cases
     factory { LoginUseCase(get()) }

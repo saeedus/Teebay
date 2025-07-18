@@ -11,10 +11,10 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Teebay"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:theme="@style/Theme.Teebay">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,8 +31,13 @@
             android:exported="true"
             android:theme="@style/Theme.Teebay" />
 
+        <activity
+            android:name=".my_products.presentation.MyProductsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Teebay" />
+
         <service
-            android:name=".services.PushNotificationService"
+            android:name=".core.data.remote.firebase.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

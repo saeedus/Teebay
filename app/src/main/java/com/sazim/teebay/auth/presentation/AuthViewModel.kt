@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.model.SignUpRequest
 import com.sazim.teebay.auth.domain.usecase.LoginUseCase
 import com.sazim.teebay.auth.domain.usecase.SignUpUseCase
+import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -86,7 +88,8 @@ class AuthViewModel(
 
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false) }
-//                        _uiEvent.send(AuthEvents.NavigateToHome)
+                        sessionManager.saveAuthToken(result.data.user.firebaseConsoleManagerToken)
+                        _uiEvent.send(AuthEvents.NavigateToMyProducts)
                         Log.d("LOGIN", "login: ${result.data}")
                     }
                 }
@@ -116,7 +119,8 @@ class AuthViewModel(
 
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false) }
-//                        _uiEvent.send(AuthEvents.NavigateToHome)
+                        sessionManager.saveAuthToken(result.data.firebaseConsoleManagerToken)
+                        _uiEvent.send(AuthEvents.NavigateToMyProducts)
                         Log.d("SIGNUP", "signup: ${result.data}")
                     }
                 }
