@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 
 class AuthViewModel : ViewModel() {
 
@@ -20,7 +21,13 @@ class AuthViewModel : ViewModel() {
 
     fun onAction(action: UserAction) {
         when (action) {
-            else -> {}
+            is UserAction.OnEmailTyped -> {
+                _state.update { it.copy(email = action.email) }
+            }
+
+            is UserAction.OnPasswordTyped -> {
+                _state.update { it.copy(password = action.password) }
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ package com.sazim.teebay.auth.presentation.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,16 +25,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.UrlAnnotation
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.R
+import com.sazim.teebay.auth.presentation.AuthState
+import com.sazim.teebay.auth.presentation.AuthViewModel
+import com.sazim.teebay.auth.presentation.UserAction
+import com.sazim.teebay.auth.presentation.components.AuthPrompt
 import com.sazim.teebay.core.presentation.ui.components.InputField
 
 @Composable
-fun AuthScreen(modifier: Modifier = Modifier) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
+fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: AuthState) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -44,8 +56,10 @@ fun AuthScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
 
         InputField(
-            value = email,
-            onValueChange = { email = it },
+            value = state.email,
+            onValueChange = {
+                viewModel.onAction(UserAction.OnEmailTyped(email = it))
+            },
             label = stringResource(id = R.string.email),
             leadingIcon = Icons.Default.Email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -54,8 +68,10 @@ fun AuthScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         InputField(
-            value = password,
-            onValueChange = { password = it },
+            value = state.password,
+            onValueChange = {
+                viewModel.onAction(UserAction.OnPasswordTyped(password = it))
+            },
             label = stringResource(id = R.string.password),
             leadingIcon = Icons.Default.Lock,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -64,8 +80,15 @@ fun AuthScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /* TODO Handle login */ }) {
+        Button(onClick = { /* TODO Handle login */ }, modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(id = R.string.login))
         }
+
+        Spacer(Modifier.height(20.dp))
+
+        AuthPrompt(
+            promptText = stringResource(R.string.dont_have_account),
+            actionText = stringResource(R.string.sign_up)
+        ) { }
     }
 }
