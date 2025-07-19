@@ -5,9 +5,12 @@ import android.content.SharedPreferences
 import com.sazim.teebay.auth.domain.local.SessionManager
 import androidx.core.content.edit
 
+//TODO implement secured shared preference for auth token later
+
 class SessionManagerImpl(context: Context) : SessionManager {
 
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     override fun saveAuthToken(token: String) {
         prefs.edit { putString(KEY_AUTH_TOKEN, token) }

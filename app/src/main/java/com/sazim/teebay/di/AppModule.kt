@@ -14,12 +14,14 @@ import com.sazim.teebay.BuildConfig
 import com.sazim.teebay.auth.data.repository.AuthRepositoryImpl
 import com.sazim.teebay.auth.domain.repository.AuthRepository
 import com.sazim.teebay.core.data.remote.HttpClientFactory
+import com.sazim.teebay.my_products.presentation.MyProductsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
+    viewModel { MyProductsViewModel() }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {

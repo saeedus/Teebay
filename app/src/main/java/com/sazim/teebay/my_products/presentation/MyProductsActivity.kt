@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import com.sazim.teebay.my_products.presentation.screens.MyProductsScreen
 
 class MyProductsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class MyProductsActivity : ComponentActivity() {
                         .padding(innerPadding)
                 ) {
 
-                    Text(text = "My Products")
+                    MyProductsScreen()
                 }
             }
         }
