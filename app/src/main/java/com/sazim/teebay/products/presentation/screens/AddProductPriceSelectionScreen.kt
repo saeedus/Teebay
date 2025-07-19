@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.core.presentation.ui.components.InputField
 import com.sazim.teebay.products.presentation.ProductsState
@@ -58,7 +59,7 @@ fun AddProductPriceSelectionScreen(
             onValueChange = {
                 viewModel.onAction(UserAction.PurchasePriceTyped(it))
             },
-
+            keyboardType = KeyboardType.Number,
             label = ""
         )
 
@@ -76,7 +77,7 @@ fun AddProductPriceSelectionScreen(
             onValueChange = {
                 viewModel.onAction(UserAction.RentPriceTyped(it))
             },
-
+            keyboardType = KeyboardType.Number,
             label = ""
         )
 

@@ -4,7 +4,6 @@
 
 package com.sazim.teebay.products.presentation.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -12,6 +11,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +20,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun SimpleSpinner(
@@ -29,6 +34,8 @@ fun SimpleSpinner(
 ) {
     val options = listOf("Daily", "Hourly")
     var expanded by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     Box(modifier = modifier) {
         OutlinedTextField(
@@ -38,7 +45,12 @@ fun SimpleSpinner(
             readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true },
+                .focusRequester(focusRequester)
+                .onFocusChanged { state ->
+                    if (state.isFocused && !expanded) {
+                        expanded = true
+                    }
+                },
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -49,17 +61,28 @@ fun SimpleSpinner(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = {
+                expanded = false
+                focusManager.clearFocus()
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            option,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    },
                     onClick = {
                         onOptionSelected(option)
                         expanded = false
+                        focusManager.clearFocus()
                     }
                 )
             }
         }
     }
 }
+

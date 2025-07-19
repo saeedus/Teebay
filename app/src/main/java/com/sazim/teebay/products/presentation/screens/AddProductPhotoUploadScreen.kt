@@ -86,11 +86,17 @@ fun AddProductPhotoUploadScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        Button(onClick = { takePictureLauncher.launch(tempImageUri) }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { takePictureLauncher.launch(tempImageUri) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = "Take Picture using Camera")
         }
 
-        Button(onClick = { pickImageLauncher.launch("image/*") }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { pickImageLauncher.launch("image/*") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = "Upload Picture from Gallery")
         }
 
@@ -110,7 +116,7 @@ fun AddProductPhotoUploadScreen(
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
             onNext = { viewModel.onAction(UserAction.NextPressedFromImgUpload) },
-            isNextEnabled = true
+            isNextEnabled = state.selectedImageUri != null
         )
 
         Spacer(Modifier.height(32.dp))

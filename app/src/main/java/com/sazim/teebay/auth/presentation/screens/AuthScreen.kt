@@ -60,28 +60,28 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.firstName,
                 onValueChange = { viewModel.onAction(UserAction.OnFirstNameTyped(it)) },
                 label = stringResource(id = R.string.first_name),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
                 value = state.lastName,
                 onValueChange = { viewModel.onAction(UserAction.OnLastNameTyped(it)) },
                 label = stringResource(id = R.string.last_name),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
                 value = state.address,
                 onValueChange = { viewModel.onAction(UserAction.OnAddressTyped(it)) },
                 label = stringResource(id = R.string.address),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
                 value = state.phoneNumber,
                 onValueChange = { viewModel.onAction(UserAction.OnPhoneNumberTyped(it)) },
                 label = stringResource(id = R.string.phone_number),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                keyboardType =KeyboardType.Phone
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -92,7 +92,7 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 viewModel.onAction(UserAction.OnEmailTyped(email = it))
             },
             label = stringResource(id = R.string.email),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardType = KeyboardType.Email
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -103,7 +103,7 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 viewModel.onAction(UserAction.OnPasswordTyped(password = it))
             },
             label = stringResource(id = R.string.password),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )
 
@@ -113,7 +113,7 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.confirmPassword,
                 onValueChange = { viewModel.onAction(UserAction.OnConfirmPasswordTyped(it)) },
                 label = stringResource(id = R.string.confirm_password),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                keyboardType = KeyboardType.Password,
                 visualTransformation = PasswordVisualTransformation()
             )
         }

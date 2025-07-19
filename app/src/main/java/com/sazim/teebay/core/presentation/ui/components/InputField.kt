@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,7 @@ fun InputField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
@@ -38,8 +39,8 @@ fun InputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height),
-            keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             isError = isError,
             maxLines = maxLines,
             singleLine = singleLine
