@@ -4,8 +4,6 @@
 
 package com.sazim.teebay.products.presentation.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,15 +17,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.products.domain.model.Product
 
@@ -82,41 +73,7 @@ fun ProductCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            var isDescriptionExpanded by remember { mutableStateOf(false) }
-            val descriptionText = product.description
-            val collapsedTextLength = 150
-            val showMoreDetailsButton = descriptionText.length > collapsedTextLength
-
-            Text(
-                text = buildAnnotatedString {
-                    if (isDescriptionExpanded) {
-                        append(descriptionText)
-                    } else {
-                        if (showMoreDetailsButton) {
-                            append(descriptionText.take(collapsedTextLength))
-                            append("... ")
-                            withStyle(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            ) {
-                                append("More Details")
-                            }
-                        } else {
-                            append(descriptionText)
-                        }
-                    }
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = if (showMoreDetailsButton) Modifier.clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    isDescriptionExpanded = !isDescriptionExpanded
-                } else Modifier
-            )
+            ProductDescriptionAnimated(descriptionText = product.description)
 
             Spacer(modifier = Modifier.height(8.dp))
 
