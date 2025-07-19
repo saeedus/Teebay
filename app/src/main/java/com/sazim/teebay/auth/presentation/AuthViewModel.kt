@@ -107,7 +107,12 @@ class AuthViewModel(
             loginUseCase(state.value.email, state.value.password).collect { result ->
                 when (result) {
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = result.error.toString()
+                            )
+                        }
                         Log.d("LOGIN", "login: ${result.error}")
                     }
 
@@ -138,7 +143,12 @@ class AuthViewModel(
             ).collect { result ->
                 when (result) {
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = result.error.toString()
+                            )
+                        }
                         Log.d("SIGNUP", "signup: ${result.error}")
                     }
 

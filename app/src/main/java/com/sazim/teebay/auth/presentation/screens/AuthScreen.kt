@@ -5,13 +5,13 @@
 package com.sazim.teebay.auth.presentation.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -131,17 +132,37 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                if (state.isLogin) {
-                    viewModel.onAction(UserAction.OnSignInTapped)
-                } else {
-                    viewModel.onAction(UserAction.OnSignUpTapped)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(if (state.isLogin) R.string.login else R.string.sign_up))
+
+        state.errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+        }
+
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(28.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        } else {
+            Button(
+                onClick = {
+                    if (state.isLogin) {
+                        viewModel.onAction(UserAction.OnSignInTapped)
+                    } else {
+                        viewModel.onAction(UserAction.OnSignUpTapped)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = stringResource(if (state.isLogin) R.string.login else R.string.sign_up))
+            }
         }
 
         Spacer(Modifier.height(20.dp))
