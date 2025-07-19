@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.presentation.BiometricAuthManager
+import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class ProductsViewModel(
     private val sessionManager: SessionManager,
-    private val biometricManager: BiometricAuthManager
+    private val biometricManager: BiometricAuthManager,
+    private val getAllProductsUseCase: GetAllProductsUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -26,6 +28,10 @@ class ProductsViewModel(
 
     private val _uiEvent = Channel<ProductsEvents>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    init {
+        getAllProducts()
+    }
 
     fun onAction(action: UserAction) {
         when (action) {
@@ -54,6 +60,26 @@ class ProductsViewModel(
         sessionManager.clearSession()
         viewModelScope.launch {
             _uiEvent.send(ProductsEvents.Logout)
+        }
+    }
+
+    private fun getAllProducts() {
+        viewModelScope.launch {
+            getAllProductsUseCase().collect {
+                when (it) {
+                    is com.sazim.teebay.core.domain.DataResult.Success -> {
+                        _state.update { state ->
+                            state.copy(products = it.data)
+                        }
+                    }
+
+                    is com.sazim.teebay.core.domain.DataResult.Error -> {
+                        _state.update { state ->
+                            state.copy(error = it.error.toString())
+                        }
+                    }
+                }
+            }
         }
     }
 }
