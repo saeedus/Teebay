@@ -1,7 +1,3 @@
-/*
- * Created by Saeedus Salehin on 19/7/25, 2:37 AM.
- */
-
 package com.sazim.teebay.products.presentation.screens
 
 import androidx.compose.foundation.layout.Column
@@ -21,14 +17,14 @@ import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.components.ProductCard
 
 @Composable
-fun MyProductsScreen(
+fun AllProductScreen(
     modifier: Modifier = Modifier,
     state: ProductsState,
     viewModel: ProductsViewModel
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Text(
-            text = "MY PRODUCTS",
+            text = "ALL PRODUCTS",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -45,7 +41,7 @@ fun MyProductsScreen(
             )
         } else {
             LazyColumn {
-                items(state.myProducts) {
+                items(state.allProducts) {
                     ProductCard(product = it)
                 }
             }

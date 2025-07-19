@@ -7,6 +7,7 @@ package com.sazim.teebay.products.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
+import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import kotlinx.coroutines.channels.Channel
@@ -67,13 +68,13 @@ class ProductsViewModel(
         viewModelScope.launch {
             getAllProductsUseCase().collect {
                 when (it) {
-                    is com.sazim.teebay.core.domain.DataResult.Success -> {
+                    is DataResult.Success -> {
                         _state.update { state ->
-                            state.copy(products = it.data)
+                            state.copy(allProducts = it.data)
                         }
                     }
 
-                    is com.sazim.teebay.core.domain.DataResult.Error -> {
+                    is DataResult.Error -> {
                         _state.update { state ->
                             state.copy(error = it.error.toString())
                         }

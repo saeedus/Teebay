@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.sazim.teebay.products.presentation.AllProductScreen
+import com.sazim.teebay.products.presentation.screens.AllProductScreen
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.screens.MyProductsScreen
@@ -31,7 +31,7 @@ fun ProductNavGraph(
         }
 
         composable(route = ProductNavRoutes.AllProductsScreen.route) {
-            AllProductScreen()
+            AllProductScreen(modifier = modifier, state = state, viewModel = viewModel)
         }
     }
 }

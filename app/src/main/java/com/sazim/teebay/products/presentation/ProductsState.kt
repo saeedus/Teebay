@@ -4,9 +4,12 @@
 
 package com.sazim.teebay.products.presentation
 
+import com.sazim.teebay.products.domain.model.Product
+
 data class ProductsState(
     val isLoading: Boolean = false,
     val isBiometricEnabled: Boolean = false,
-    val products: List<com.sazim.teebay.products.domain.model.Product> = emptyList(),
+    val allProducts: List<Product> = emptyList(),
+    val myProducts: List<Product> = emptyList(),
     val error: String? = null
 )
