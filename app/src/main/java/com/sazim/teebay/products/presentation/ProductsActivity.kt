@@ -38,17 +38,21 @@ import com.sazim.teebay.products.presentation.navigation.ProductNavRoutes
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.R
+import com.sazim.teebay.core.presentation.navigation.getCurrentRoute
 
 class ProductsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -188,8 +192,16 @@ class ProductsActivity : ComponentActivity() {
                         )
                     },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = { /*TODO: Navigate to add product*/ }) {
-                            Icon(Icons.Filled.Add, "Add new product")
+                        if (getCurrentRoute(navController) == ProductNavRoutes.MyProductsScreen.route) FloatingActionButton(
+                            onClick = { /*TODO: Navigate to add product*/ },
+                            shape = CircleShape,
+                            containerColor = colorResource(R.color.purple_200)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_add),
+                                contentDescription = null,
+                                modifier = Modifier.size(28.dp)
+                            )
                         }
                     }
                 ) { innerPadding ->
