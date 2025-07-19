@@ -25,7 +25,8 @@ fun MyProductsScreen(
                 id = 1,
                 seller = 1,
                 title = "Product 1",
-                description = "Description for Product 1",
+                description = "AuraLink AI Home Hub Pro: Your Smart Home Redefined \uD83C\uDFE1\n" +
+                        "Experience the ultimate in smart living with the AuraLink AI Home Hub Pro. This revolutionary device seamlessly integrates all your smart home tech, from lights and thermostats to security cameras, into one intuitive system. Boasting cutting-edge AI, it learns your habits for effortless voice and touch control. Enjoy crystal-clear audio and enhance your home security with local processing for ultimate privacy. Its elegant design fits any décor, and setup is incredibly simple. This unit is in pristine condition, ready to transform your home into an intelligent sanctuary.",
                 categories = listOf("Category 1", "Category 2"),
                 productImage = "https://example.com/product1.jpg",
                 purchasePrice = "100.00",
@@ -33,6 +34,6 @@ fun MyProductsScreen(
                 rentOption = "Daily",
                 datePosted = "11 march"
             )
-        ) { }
+        )
     }
 }
