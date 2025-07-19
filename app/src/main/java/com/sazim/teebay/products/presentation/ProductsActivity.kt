@@ -38,7 +38,17 @@ import com.sazim.teebay.products.presentation.navigation.ProductNavRoutes
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import android.widget.Toast
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
+import com.sazim.teebay.R
 
 class ProductsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -60,8 +70,10 @@ class ProductsActivity : ComponentActivity() {
                             startActivity(intent)
                             finish()
                         }
+
                         is ProductsEvents.ShowToast -> {
-                            Toast.makeText(this@ProductsActivity, it.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ProductsActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 }
@@ -71,8 +83,16 @@ class ProductsActivity : ComponentActivity() {
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
+                        Spacer(Modifier.height(40.dp))
+
                         NavigationDrawerItem(
-                            label = { Text("All Products") },
+                            label = {
+                                Text(
+                                    "All Products",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
                             selected = false,
                             onClick = {
                                 scope.launch { drawerState.close() }
@@ -81,7 +101,13 @@ class ProductsActivity : ComponentActivity() {
                         )
 
                         NavigationDrawerItem(
-                            label = { Text("My Products") },
+                            label = {
+                                Text(
+                                    "My Products",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
                             selected = false,
                             onClick = {
                                 scope.launch { drawerState.close() }
@@ -96,7 +122,10 @@ class ProductsActivity : ComponentActivity() {
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text("Biometric")
+                                    Text(
+                                        "Biometric",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
                                     Switch(
                                         checked = state.isBiometricEnabled,
                                         onCheckedChange = {
@@ -105,6 +134,7 @@ class ProductsActivity : ComponentActivity() {
                                     )
                                 }
                             },
+                            shape = RoundedCornerShape(12.dp),
                             selected = false,
                             onClick = {
                                 viewModel.onAction(UserAction.ToggleBiometric)
@@ -114,9 +144,22 @@ class ProductsActivity : ComponentActivity() {
                             }
                         )
 
+                        Spacer(Modifier.weight(1f))
+
                         NavigationDrawerItem(
-                            label = { Text("Logout") },
+                            label = {
+                                Text(
+                                    "Logout",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
                             selected = false,
+                            colors = NavigationDrawerItemDefaults.colors(
+                                unselectedContainerColor = colorResource(id = R.color.red).copy(
+                                    alpha = 0.2f
+                                ),
+                            ),
                             onClick = {
                                 viewModel.onAction(UserAction.Logout)
                                 scope.launch {
@@ -124,6 +167,8 @@ class ProductsActivity : ComponentActivity() {
                                 }
                             }
                         )
+
+                        Spacer(Modifier.height(40.dp))
                     }
                 }
             ) {
@@ -141,6 +186,11 @@ class ProductsActivity : ComponentActivity() {
                                 }
                             }
                         )
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(onClick = { /*TODO: Navigate to add product*/ }) {
+                            Icon(Icons.Filled.Add, "Add new product")
+                        }
                     }
                 ) { innerPadding ->
                     ProductNavGraph(

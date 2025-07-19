@@ -75,7 +75,7 @@ fun ProductCard(
 
             ProductDescriptionAnimated(descriptionText = product.description)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Date Posted & Views
             Row(
