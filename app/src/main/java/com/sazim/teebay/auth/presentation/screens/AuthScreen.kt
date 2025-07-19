@@ -15,11 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
@@ -65,7 +60,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.firstName,
                 onValueChange = { viewModel.onAction(UserAction.OnFirstNameTyped(it)) },
                 label = stringResource(id = R.string.first_name),
-                leadingIcon = Icons.Default.Person,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -73,7 +67,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.lastName,
                 onValueChange = { viewModel.onAction(UserAction.OnLastNameTyped(it)) },
                 label = stringResource(id = R.string.last_name),
-                leadingIcon = Icons.Default.Person,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -81,7 +74,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.address,
                 onValueChange = { viewModel.onAction(UserAction.OnAddressTyped(it)) },
                 label = stringResource(id = R.string.address),
-                leadingIcon = Icons.Default.Person, // Consider a more appropriate icon
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -89,7 +81,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.phoneNumber,
                 onValueChange = { viewModel.onAction(UserAction.OnPhoneNumberTyped(it)) },
                 label = stringResource(id = R.string.phone_number),
-                leadingIcon = Icons.Default.Phone,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -101,7 +92,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 viewModel.onAction(UserAction.OnEmailTyped(email = it))
             },
             label = stringResource(id = R.string.email),
-            leadingIcon = Icons.Default.Email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
 
@@ -113,7 +103,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 viewModel.onAction(UserAction.OnPasswordTyped(password = it))
             },
             label = stringResource(id = R.string.password),
-            leadingIcon = Icons.Default.Lock,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation()
         )
@@ -124,7 +113,6 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
                 value = state.confirmPassword,
                 onValueChange = { viewModel.onAction(UserAction.OnConfirmPasswordTyped(it)) },
                 label = stringResource(id = R.string.confirm_password),
-                leadingIcon = Icons.Default.Lock,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation()
             )

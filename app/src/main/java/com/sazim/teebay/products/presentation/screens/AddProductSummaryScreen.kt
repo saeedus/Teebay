@@ -52,19 +52,19 @@ fun AddProductSummaryScreen(
 
         Text(
             text = "Title: ${state.productTitle}", style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 20.dp)
         )
 
         Text(
             text = "Categories:\n${state.categories.joinToString()}",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 20.dp)
         )
 
         Text(
             text = "Description: ${state.productSummary}",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 20.dp)
         )
 
 

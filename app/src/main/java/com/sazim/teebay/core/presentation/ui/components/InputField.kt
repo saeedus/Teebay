@@ -22,7 +22,6 @@ fun InputField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
@@ -39,11 +38,6 @@ fun InputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height),
-            leadingIcon = {
-                if (leadingIcon != null) {
-                    Icon(imageVector = leadingIcon, contentDescription = label)
-                }
-            },
             keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
             isError = isError,
