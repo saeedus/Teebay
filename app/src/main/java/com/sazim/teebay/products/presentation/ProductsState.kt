@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.products.presentation
 
+import android.net.Uri
 import com.sazim.teebay.products.domain.model.Product
 
 data class ProductsState(
@@ -20,5 +21,6 @@ data class ProductsState(
     val rentPrice: String = "",
     val productSummary: String = "",
     val categories: List<String> = emptyList(),
-    val selectedRentalOption: String = ""
+    val selectedRentalOption: String = "",
+    val selectedImageUri: Uri? = null
 )

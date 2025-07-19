@@ -111,6 +111,11 @@ class ProductsViewModel(
             }
 
             UserAction.AddProduct -> addProduct()
+            is UserAction.ImageSelected -> {
+                _state.update {
+                    it.copy(selectedImageUri = action.url)
+                }
+            }
         }
     }
 
