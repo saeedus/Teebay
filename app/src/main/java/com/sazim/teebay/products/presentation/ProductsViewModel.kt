@@ -85,6 +85,30 @@ class ProductsViewModel(
                     _uiEvent.send(ProductsEvents.NavigateToProductPriceScreen)
                 }
             }
+
+            is UserAction.PurchasePriceTyped -> {
+                _state.update {
+                    it.copy(purchasePrice = action.title)
+                }
+            }
+
+            is UserAction.RentPriceTyped -> {
+                _state.update {
+                    it.copy(rentPrice = action.title)
+                }
+            }
+
+            is UserAction.RentOptionSelected -> {
+                _state.update {
+                    it.copy(selectedRentalOption = action.option)
+                }
+            }
+
+            UserAction.NextPressedFromPriceScreen -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.NavigateToSummaryScreen)
+                }
+            }
         }
     }
 

@@ -16,6 +16,9 @@ data class ProductsState(
     //Add product
     val totalStepsToAddProduct: Int = 6,
     val productTitle: String = "",
+    val purchasePrice: String = "",
+    val rentPrice: String = "",
     val productSummary: String = "",
-    val categories: List<String> = emptyList()
+    val categories: List<String> = emptyList(),
+    val selectedRentalOption: String = ""
 )
