@@ -32,7 +32,7 @@
             android:theme="@style/Theme.Teebay" />
 
         <activity
-            android:name=".my_products.presentation.MyProductsActivity"
+            android:name=".products.presentation.ProductsActivity"
             android:exported="true"
             android:theme="@style/Theme.Teebay" />
 

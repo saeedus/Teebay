@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.auth.presentation.AuthActivity
-import com.sazim.teebay.my_products.presentation.MyProductsActivity
+import com.sazim.teebay.products.presentation.ProductsActivity
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         if (sessionManager.isLoggedIn()) {
-            startActivity(Intent(this, MyProductsActivity::class.java))
+            startActivity(Intent(this, ProductsActivity::class.java))
         } else {
             startActivity(Intent(this, AuthActivity::class.java))
         }

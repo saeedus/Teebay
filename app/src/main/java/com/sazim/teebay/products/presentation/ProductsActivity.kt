@@ -2,7 +2,7 @@
  * Created by Saeedus Salehin on 19/7/25, 2:37 AM.
  */
 
-package com.sazim.teebay.my_products.presentation
+package com.sazim.teebay.products.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.sazim.teebay.my_products.presentation.screens.MyProductsScreen
+import com.sazim.teebay.products.presentation.screens.MyProductsScreen
 
-class MyProductsActivity : ComponentActivity() {
+class ProductsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

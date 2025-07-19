@@ -17,8 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.sazim.teebay.auth.presentation.navigation.AuthNavGraph
 import com.sazim.teebay.auth.presentation.navigation.AuthNavRoutes
-import com.sazim.teebay.my_products.presentation.MyProductsActivity
-import io.ktor.network.selector.SelectInterest.Companion.flags
+import com.sazim.teebay.products.presentation.ProductsActivity
 import org.koin.compose.viewmodel.koinViewModel
 
 class AuthActivity : ComponentActivity() {
@@ -33,7 +32,7 @@ class AuthActivity : ComponentActivity() {
                     when (event) {
                         AuthEvents.NavigateToMyProducts -> {
                             val intent =
-                                Intent(this@AuthActivity, MyProductsActivity::class.java).apply {
+                                Intent(this@AuthActivity, ProductsActivity::class.java).apply {
                                     flags =
                                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
