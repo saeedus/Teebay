@@ -21,4 +21,5 @@ sealed interface UserAction {
     data object NextPressedFromImgUpload : UserAction
     data object NextPressedFromPriceScreen : UserAction
     data class RentOptionSelected(val option: String) : UserAction
+    data object AddProduct : UserAction
 }

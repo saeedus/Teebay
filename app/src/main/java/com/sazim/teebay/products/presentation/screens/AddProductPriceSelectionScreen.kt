@@ -94,7 +94,7 @@ fun AddProductPriceSelectionScreen(
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
             onNext = { viewModel.onAction(UserAction.NextPressedFromPriceScreen) },
-            isNextEnabled = true
+            isNextEnabled = state.purchasePrice.isNotBlank() && state.rentPrice.isNotBlank() && state.selectedRentalOption.isNotBlank()
         )
 
         Spacer(Modifier.height(32.dp))

@@ -109,6 +109,8 @@ class ProductsViewModel(
                     _uiEvent.send(ProductsEvents.NavigateToSummaryScreen)
                 }
             }
+
+            UserAction.AddProduct -> addProduct()
         }
     }
 
@@ -128,11 +130,15 @@ class ProductsViewModel(
         }
     }
 
-    fun logout() {
+    private fun logout() {
         sessionManager.clearSession()
         viewModelScope.launch {
             _uiEvent.send(ProductsEvents.Logout)
         }
+    }
+
+    private fun addProduct() {
+        //TODO
     }
 
     private fun getAllProducts() {
