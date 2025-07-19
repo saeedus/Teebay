@@ -5,12 +5,17 @@
 package com.sazim.teebay.products.presentation.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,20 +24,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CategorySpinner(
-    selectedCategory: String,
-    onCategorySelected: (String) -> Unit,
+    selectedCategories: List<String>,
+    onCategoriesSelected: (List<String>) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val categories = listOf(
+    val allCategories = listOf(
         "ELECTRONICS",
         "FURNITURE",
         "HOME APPLIANCES",
@@ -47,9 +54,10 @@ fun CategorySpinner(
 
     Box(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
-            value = selectedCategory,
+            value = if (selectedCategories.isEmpty()) "" else selectedCategories.joinToString(", "),
             onValueChange = {},
             readOnly = true,
+            label = { Text("Select Categories") },
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -72,20 +80,42 @@ fun CategorySpinner(
                 expanded = false
                 focusManager.clearFocus()
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            categories.forEach { category ->
+            allCategories.forEach { category ->
+                val isSelected = selectedCategories.contains(category)
                 DropdownMenuItem(
-                    text = { Text(category) },
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(
+                                checked = isSelected,
+                                onCheckedChange = null
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(category)
+                        }
+                    },
                     onClick = {
-                        onCategorySelected(category)
-                        expanded = false
-                        focusManager.clearFocus()
+                        val newSelection = if (isSelected) {
+                            selectedCategories - category
+                        } else {
+                            selectedCategories + category
+                        }
+                        onCategoriesSelected(newSelection)
                     }
                 )
             }
+
+            HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+            DropdownMenuItem(
+                text = { Text("Done", fontWeight = FontWeight.Bold) },
+                onClick = {
+                    expanded = false
+                    focusManager.clearFocus()
+                }
+            )
         }
     }
 }
+

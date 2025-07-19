@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.sazim.teebay.core.presentation.ui.components.InputField
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
@@ -57,12 +56,13 @@ fun AddProductCategoryScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        var selectedCategory by remember { mutableStateOf("") }
+        var selectedCategories by remember { mutableStateOf(emptyList<String>()) }
 
         CategorySpinner(
-            selectedCategory = selectedCategory,
-            onCategorySelected = { selectedCategory = it }
+            selectedCategories = selectedCategories,
+            onCategoriesSelected = { selectedCategories = it }
         )
+
 
 
         Spacer(Modifier.weight(2f))
