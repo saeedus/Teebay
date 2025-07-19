@@ -193,7 +193,9 @@ class ProductsActivity : ComponentActivity() {
                     },
                     floatingActionButton = {
                         if (getCurrentRoute(navController) == ProductNavRoutes.MyProductsScreen.route) FloatingActionButton(
-                            onClick = { /*TODO: Navigate to add product*/ },
+                            onClick = {
+                                navController.navigate(ProductNavRoutes.AddProductTitleScreen.route)
+                            },
                             shape = CircleShape,
                             containerColor = colorResource(R.color.purple_200)
                         ) {

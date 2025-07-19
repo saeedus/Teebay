@@ -12,6 +12,12 @@ import androidx.navigation.compose.composable
 import com.sazim.teebay.products.presentation.screens.AllProductScreen
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
+import com.sazim.teebay.products.presentation.screens.AddProductCategoryScreen
+import com.sazim.teebay.products.presentation.screens.AddProductDescScreen
+import com.sazim.teebay.products.presentation.screens.AddProductPhotoUploadScreen
+import com.sazim.teebay.products.presentation.screens.AddProductPriceSelectionScreen
+import com.sazim.teebay.products.presentation.screens.AddProductSummaryScreen
+import com.sazim.teebay.products.presentation.screens.AddProductTitleScreen
 import com.sazim.teebay.products.presentation.screens.MyProductsScreen
 
 @Composable
@@ -33,5 +39,34 @@ fun ProductNavGraph(
         composable(route = ProductNavRoutes.AllProductsScreen.route) {
             AllProductScreen(modifier = modifier, state = state, viewModel = viewModel)
         }
+
+        composable(route = ProductNavRoutes.AddProductTitleScreen.route) {
+            AddProductTitleScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(route = ProductNavRoutes.AddProductCategoryScreen.route) {
+            AddProductCategoryScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(route = ProductNavRoutes.AddProductDescScreen.route) {
+            AddProductDescScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(route = ProductNavRoutes.AddProductPhotoUploadScreen.route) {
+            AddProductPhotoUploadScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(route = ProductNavRoutes.AddProductPriceSelectionScreen.route) {
+            AddProductPriceSelectionScreen(
+                modifier = modifier,
+                state = state,
+                viewModel = viewModel
+            )
+        }
+
+        composable(route = ProductNavRoutes.AddProductSummaryScreen.route) {
+            AddProductSummaryScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
     }
 }
