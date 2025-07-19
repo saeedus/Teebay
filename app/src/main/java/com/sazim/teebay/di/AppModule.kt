@@ -20,6 +20,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.data.repository.ProductRepositoryImpl
 import com.sazim.teebay.products.domain.ProductRepository
+import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 
 val appModule = module {
@@ -46,6 +47,7 @@ val appModule = module {
     factory { LoginUseCase(get()) }
     factory { SignUpUseCase(get()) }
     factory { GetAllProductsUseCase(get()) }
+    factory { AddProductUseCase(get()) }
 
     //biometric manager
     factory { BiometricAuthManager(get()) }
