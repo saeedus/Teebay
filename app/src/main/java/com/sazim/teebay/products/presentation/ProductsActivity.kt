@@ -83,6 +83,10 @@ class ProductsActivity : ComponentActivity() {
                         ProductsEvents.NavigateToCategorySelectScreen -> {
                             navController.navigate(ProductNavRoutes.AddProductCategoryScreen.route)
                         }
+
+                        ProductsEvents.PopBackStack -> {
+                            navController.popBackStack()
+                        }
                     }
                 }
             }

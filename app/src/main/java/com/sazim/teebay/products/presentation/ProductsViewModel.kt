@@ -55,6 +55,12 @@ class ProductsViewModel(
                     it.copy(categories = action.categories)
                 }
             }
+
+            UserAction.OnBackPressed -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.PopBackStack)
+                }
+            }
         }
     }
 

@@ -10,17 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
+import com.sazim.teebay.products.presentation.components.BackNextNavigationRow
 import com.sazim.teebay.products.presentation.components.CategorySpinner
 import com.sazim.teebay.products.presentation.components.StepProgressIndicator
 
@@ -59,15 +58,11 @@ fun AddProductCategoryScreen(
 
         Spacer(Modifier.weight(2f))
 
-        Button(
-            enabled = state.categories.isNotEmpty(),
-            onClick = {
-                viewModel.onAction(UserAction.NextPressedFromTitleScreen)
-            },
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text(text = "Next")
-        }
+        BackNextNavigationRow(
+            onBack = { viewModel.onAction(UserAction.OnBackPressed) },
+            onNext = { viewModel.onAction(UserAction.NextPressedFromTitleScreen) },
+            isNextEnabled = state.categories.isNotEmpty()
+        )
 
         Spacer(Modifier.height(32.dp))
     }
