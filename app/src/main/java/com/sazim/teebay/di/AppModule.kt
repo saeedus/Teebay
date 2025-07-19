@@ -19,14 +19,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.data.repository.ProductRepositoryImpl
-import com.sazim.teebay.products.domain.ProductRepository
+import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { ProductsViewModel(get(), get(), get()) }
+    viewModel { ProductsViewModel(get(), get(), get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {

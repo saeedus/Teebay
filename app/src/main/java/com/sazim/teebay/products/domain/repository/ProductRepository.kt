@@ -1,12 +1,7 @@
-/*
- * Created by Saeedus Salehin on 19/7/25, 6:57 PM.
- */
-
-package com.sazim.teebay.products.domain
+package com.sazim.teebay.products.domain.repository
 
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
-import com.sazim.teebay.products.domain.model.AddProductRequest
 import com.sazim.teebay.products.domain.model.Product
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import kotlinx.coroutines.flow.Flow

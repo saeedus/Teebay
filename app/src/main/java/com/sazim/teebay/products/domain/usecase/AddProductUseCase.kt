@@ -7,7 +7,7 @@ package com.sazim.teebay.products.domain.usecase
 import com.google.firebase.Timestamp
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
-import com.sazim.teebay.products.domain.ProductRepository
+import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
@@ -29,10 +29,10 @@ class AddProductUseCase(
     ): Flow<DataResult<Product, DataError.Network>> {
         val formData = MultiPartFormDataContent(
             formData {
-                append("seller", -1)
+                append("seller", 1)
                 append("title", title)
                 append("description", description)
-                append("categories", categories)
+                append("categories[]", categories)
                 append("purchase_price", purchasePrice)
                 append("rent_price", rentPrice)
                 append("rent_option", rentOption)

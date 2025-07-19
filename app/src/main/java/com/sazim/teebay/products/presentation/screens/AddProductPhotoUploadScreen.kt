@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
+import com.sazim.teebay.products.domain.utils.uriToByteArray
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
@@ -50,7 +51,7 @@ fun AddProductPhotoUploadScreen(
         contract = ActivityResultContracts.TakePicture()
     ) { success: Boolean ->
         if (success) {
-            viewModel.onAction(UserAction.ImageSelected(tempImageUri))
+            viewModel.onAction(UserAction.ImageSelected(uriToByteArray(context, tempImageUri)))
         } else {
             null
         }
@@ -60,7 +61,7 @@ fun AddProductPhotoUploadScreen(
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        viewModel.onAction(UserAction.ImageSelected(uri))
+        viewModel.onAction(UserAction.ImageSelected(uriToByteArray(context, uri!!)))
     }
 
 

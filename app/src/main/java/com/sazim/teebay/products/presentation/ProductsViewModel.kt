@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
+import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class ProductsViewModel(
     private val sessionManager: SessionManager,
     private val biometricManager: BiometricAuthManager,
-    private val getAllProductsUseCase: GetAllProductsUseCase
+    private val getAllProductsUseCase: GetAllProductsUseCase,
+    private val addProductUseCase: AddProductUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -113,7 +115,7 @@ class ProductsViewModel(
             UserAction.AddProduct -> addProduct()
             is UserAction.ImageSelected -> {
                 _state.update {
-                    it.copy(selectedImageUri = action.url)
+                    it.copy(selectedImageUri = action.byteArray)
                 }
             }
         }
@@ -143,7 +145,31 @@ class ProductsViewModel(
     }
 
     private fun addProduct() {
-        //TODO
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            addProductUseCase(
+                title = state.value.productTitle,
+                description = state.value.productSummary,
+                categories = state.value.categories,
+                productImage = state.value.selectedImageUri!!,
+                purchasePrice = state.value.purchasePrice,
+                rentPrice = state.value.rentPrice,
+                rentOption = state.value.selectedRentalOption
+            ).collect {
+                when (it) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false) }
+                        getAllProducts()
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update { state ->
+                            state.copy(error = it.error.toString(), isLoading = false)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun getAllProducts() {

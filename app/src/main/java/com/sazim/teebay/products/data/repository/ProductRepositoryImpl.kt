@@ -10,7 +10,7 @@ import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.products.data.dto.ProductDto
 import com.sazim.teebay.products.data.utils.toDomain
-import com.sazim.teebay.products.domain.ProductRepository
+import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -37,7 +37,7 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
     override suspend fun addProduct(formData: MultiPartFormDataContent): Flow<DataResult<Product, DataError.Network>> =
         makeApiRequest<ProductDto, Product>(
             method = HttpMethod.Post,
-            endpoint = "product/",
+            endpoint = "products/",
             requestBody = formData,
             transform = { it.toDomain() }
         )

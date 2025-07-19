@@ -24,5 +24,5 @@ sealed interface UserAction {
     data object NextPressedFromPriceScreen : UserAction
     data class RentOptionSelected(val option: String) : UserAction
     data object AddProduct : UserAction
-    data class ImageSelected(val url: Uri?) : UserAction
+    data class ImageSelected(val byteArray: ByteArray?) : UserAction
 }
