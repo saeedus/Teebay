@@ -14,6 +14,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +26,7 @@ import com.sazim.teebay.core.presentation.ui.components.InputField
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
+import com.sazim.teebay.products.presentation.components.CategorySpinner
 import com.sazim.teebay.products.presentation.components.StepProgressIndicator
 
 @Composable
@@ -52,7 +57,13 @@ fun AddProductCategoryScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        //TODO add category spinner
+        var selectedCategory by remember { mutableStateOf("") }
+
+        CategorySpinner(
+            selectedCategory = selectedCategory,
+            onCategorySelected = { selectedCategory = it }
+        )
+
 
         Spacer(Modifier.weight(2f))
 
