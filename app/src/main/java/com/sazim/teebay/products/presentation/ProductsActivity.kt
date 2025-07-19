@@ -95,6 +95,10 @@ class ProductsActivity : ComponentActivity() {
                         ProductsEvents.NavigateToProductPicScreen -> {
                             navController.navigate(ProductNavRoutes.AddProductPhotoUploadScreen.route)
                         }
+
+                        ProductsEvents.NavigateToProductPriceScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductPriceSelectionScreen.route)
+                        }
                     }
                 }
             }

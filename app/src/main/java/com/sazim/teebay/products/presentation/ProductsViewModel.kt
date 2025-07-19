@@ -79,6 +79,12 @@ class ProductsViewModel(
                     it.copy(productSummary = action.title)
                 }
             }
+
+            UserAction.NextPressedFromImgUpload -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.NavigateToProductPriceScreen)
+                }
+            }
         }
     }
 

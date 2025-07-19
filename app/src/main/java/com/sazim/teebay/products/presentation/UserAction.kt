@@ -16,4 +16,5 @@ sealed interface UserAction {
     data class CategoriesSelected(val categories: List<String>) : UserAction
     data object NextPressedFromCategoryScreen : UserAction
     data object NextPressedFromSummaryScreen : UserAction
+    data object NextPressedFromImgUpload : UserAction
 }
