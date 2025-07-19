@@ -5,5 +5,5 @@
 package com.sazim.teebay.products.presentation
 
 sealed class ProductsEvents {
-    // TODO: Add events
+    data object Logout : ProductsEvents()
 }

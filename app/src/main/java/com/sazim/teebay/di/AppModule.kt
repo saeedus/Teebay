@@ -21,7 +21,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { ProductsViewModel() }
+    viewModel { ProductsViewModel(get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {

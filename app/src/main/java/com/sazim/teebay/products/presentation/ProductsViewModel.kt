@@ -5,13 +5,17 @@
 package com.sazim.teebay.products.presentation
 
 import androidx.lifecycle.ViewModel
-import com.sazim.teebay.auth.presentation.UserAction
+import androidx.lifecycle.viewModelScope
+import com.sazim.teebay.auth.domain.local.SessionManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
-class ProductsViewModel : ViewModel() {
+class ProductsViewModel(
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ProductsState())
     val state = _state.asStateFlow()
@@ -21,7 +25,14 @@ class ProductsViewModel : ViewModel() {
 
     fun onAction(action: UserAction) {
         when (action) {
-            else -> {}
+            UserAction.Logout -> logout()
+        }
+    }
+
+    fun logout() {
+        sessionManager.clearSession()
+        viewModelScope.launch {
+            _uiEvent.send(ProductsEvents.Logout)
         }
     }
 }
