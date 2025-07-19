@@ -6,4 +6,5 @@ package com.sazim.teebay.products.presentation
 
 sealed interface UserAction {
     data object Logout : UserAction
+    data object Fingerprint : UserAction
 }

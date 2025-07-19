@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
         android:name=".TeebayApplication"
@@ -29,7 +30,7 @@
         <activity
             android:name=".auth.presentation.AuthActivity"
             android:exported="true"
-            android:theme="@style/Theme.Teebay" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <activity
             android:name=".products.presentation.ProductsActivity"

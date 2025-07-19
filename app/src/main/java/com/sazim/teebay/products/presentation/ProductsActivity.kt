@@ -34,6 +34,8 @@ import com.sazim.teebay.products.presentation.navigation.ProductNavRoutes
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
+import android.widget.Toast
+
 class ProductsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,9 @@ class ProductsActivity : ComponentActivity() {
                             val intent = Intent(this@ProductsActivity, AuthActivity::class.java)
                             startActivity(intent)
                             finish()
+                        }
+                        is ProductsEvents.ShowToast -> {
+                            Toast.makeText(this@ProductsActivity, it.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -85,6 +90,17 @@ class ProductsActivity : ComponentActivity() {
                             selected = false,
                             onClick = {
                                 viewModel.onAction(UserAction.Logout)
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                            }
+                        )
+
+                        NavigationDrawerItem(
+                            label = { Text("Fingerprint") },
+                            selected = false,
+                            onClick = {
+                                viewModel.onAction(UserAction.Fingerprint)
                                 scope.launch {
                                     drawerState.close()
                                 }

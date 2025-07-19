@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ProductsViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val fingerprintManager: com.sazim.teebay.core.presentation.FingerprintManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProductsState())
@@ -26,6 +27,22 @@ class ProductsViewModel(
     fun onAction(action: UserAction) {
         when (action) {
             UserAction.Logout -> logout()
+            UserAction.Fingerprint -> toggleFingerprint()
+        }
+    }
+
+    private fun toggleFingerprint() {
+        if (fingerprintManager.isBiometricSupported()) {
+            val isEnabled = sessionManager.isFingerprintLoginEnabled()
+            sessionManager.setFingerprintLoginEnabled(!isEnabled)
+            val message = if (!isEnabled) "Fingerprint login enabled" else "Fingerprint login disabled"
+            viewModelScope.launch {
+                _uiEvent.send(ProductsEvents.ShowToast(message))
+            }
+        } else {
+            viewModelScope.launch {
+                _uiEvent.send(ProductsEvents.ShowToast("Fingerprint not supported on this device"))
+            }
         }
     }
 

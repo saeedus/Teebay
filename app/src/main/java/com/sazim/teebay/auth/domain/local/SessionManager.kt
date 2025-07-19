@@ -5,4 +5,6 @@ interface SessionManager {
     fun getAuthToken(): String?
     fun isLoggedIn(): Boolean
     fun clearSession()
+    fun isFingerprintLoginEnabled(): Boolean
+    fun setFingerprintLoginEnabled(enabled: Boolean)
 }

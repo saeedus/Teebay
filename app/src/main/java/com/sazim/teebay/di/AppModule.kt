@@ -18,10 +18,12 @@ import com.sazim.teebay.products.presentation.ProductsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 
+import com.sazim.teebay.core.presentation.FingerprintManager
+
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { ProductsViewModel(get()) }
+    viewModel { ProductsViewModel(get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {
@@ -40,4 +42,7 @@ val appModule = module {
     //use cases
     factory { LoginUseCase(get()) }
     factory { SignUpUseCase(get()) }
+
+    //fingerprint manager
+    factory { FingerprintManager(get()) }
 }
