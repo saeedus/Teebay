@@ -12,6 +12,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProductsViewModel(
@@ -19,7 +20,8 @@ class ProductsViewModel(
     private val biometricManager: BiometricAuthManager
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ProductsState())
+    private val _state =
+        MutableStateFlow(ProductsState(isBiometricEnabled = sessionManager.isBiometricLoginEnabled()))
     val state = _state.asStateFlow()
 
     private val _uiEvent = Channel<ProductsEvents>()
@@ -36,6 +38,7 @@ class ProductsViewModel(
         if (biometricManager.isBiometricSupported()) {
             val isEnabled = sessionManager.isBiometricLoginEnabled()
             sessionManager.setBiometricLoginEnabled(!isEnabled)
+            _state.update { it.copy(isBiometricEnabled = !isEnabled) }
             val message = if (!isEnabled) "Biometric login enabled" else "Biometric login disabled"
             viewModelScope.launch {
                 _uiEvent.send(ProductsEvents.ShowToast(message))

@@ -7,9 +7,12 @@ package com.sazim.teebay.products.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import android.content.Intent
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +22,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -33,8 +37,8 @@ import com.sazim.teebay.products.presentation.navigation.ProductNavGraph
 import com.sazim.teebay.products.presentation.navigation.ProductNavRoutes
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
-
 import android.widget.Toast
+import androidx.compose.foundation.layout.fillMaxWidth
 
 class ProductsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +90,21 @@ class ProductsActivity : ComponentActivity() {
                         )
 
                         NavigationDrawerItem(
-                            label = { Text("Biometric") },
+                            label = {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text("Biometric")
+                                    Switch(
+                                        checked = state.isBiometricEnabled,
+                                        onCheckedChange = {
+                                            viewModel.onAction(UserAction.ToggleBiometric)
+                                        }
+                                    )
+                                }
+                            },
                             selected = false,
                             onClick = {
                                 viewModel.onAction(UserAction.ToggleBiometric)

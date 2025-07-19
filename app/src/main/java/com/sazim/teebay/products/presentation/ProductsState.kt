@@ -5,5 +5,6 @@
 package com.sazim.teebay.products.presentation
 
 data class ProductsState(
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isBiometricEnabled: Boolean = false
 )
