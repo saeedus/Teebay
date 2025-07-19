@@ -44,6 +44,7 @@ class ProductsActivity : ComponentActivity() {
             val state by viewModel.state.collectAsState()
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val scope = rememberCoroutineScope()
+            val navController = rememberNavController()
 
             LaunchedEffect(key1 = Unit) {
                 viewModel.uiEvent.collect {
@@ -61,6 +62,24 @@ class ProductsActivity : ComponentActivity() {
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
+                        NavigationDrawerItem(
+                            label = { Text("All Products") },
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate(ProductNavRoutes.AllProductsScreen.route)
+                            }
+                        )
+
+                        NavigationDrawerItem(
+                            label = { Text("My Products") },
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate(ProductNavRoutes.MyProductsScreen.route)
+                            }
+                        )
+
                         NavigationDrawerItem(
                             label = { Text("Logout") },
                             selected = false,
@@ -91,7 +110,7 @@ class ProductsActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
                     ProductNavGraph(
-                        navController = rememberNavController(),
+                        navController = navController,
                         startDestination = ProductNavRoutes.MyProductsScreen,
                         viewModel = viewModel,
                         state = state,
