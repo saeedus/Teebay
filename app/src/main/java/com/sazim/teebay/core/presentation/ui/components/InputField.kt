@@ -2,6 +2,7 @@ package com.sazim.teebay.core.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -24,6 +26,9 @@ fun InputField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = true,
+    height: Dp = 60.dp,
     errorText: String? = null
 ) {
     Column(modifier = modifier) {
@@ -31,7 +36,9 @@ fun InputField(
             value = value,
             onValueChange = onValueChange,
             label = { Text(text = label) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(height),
             leadingIcon = {
                 if (leadingIcon != null) {
                     Icon(imageVector = leadingIcon, contentDescription = label)
@@ -40,7 +47,8 @@ fun InputField(
             keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
             isError = isError,
-            singleLine = true
+            maxLines = maxLines,
+            singleLine = singleLine
         )
         if (isError && errorText != null) {
             Text(

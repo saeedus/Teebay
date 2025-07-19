@@ -60,7 +60,7 @@ fun AddProductCategoryScreen(
 
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
-            onNext = { viewModel.onAction(UserAction.NextPressedFromTitleScreen) },
+            onNext = { viewModel.onAction(UserAction.NextPressedFromCategoryScreen) },
             isNextEnabled = state.categories.isNotEmpty()
         )
 

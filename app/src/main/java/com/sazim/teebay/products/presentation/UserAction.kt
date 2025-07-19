@@ -11,6 +11,9 @@ sealed interface UserAction {
 
     //Add product
     data class ProductTitleTyped(val title: String) : UserAction
+    data class ProductSummaryTyped(val title: String) : UserAction
     data object NextPressedFromTitleScreen : UserAction
     data class CategoriesSelected(val categories: List<String>) : UserAction
+    data object NextPressedFromCategoryScreen : UserAction
+    data object NextPressedFromSummaryScreen : UserAction
 }

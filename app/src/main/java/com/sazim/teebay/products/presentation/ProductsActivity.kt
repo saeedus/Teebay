@@ -87,6 +87,14 @@ class ProductsActivity : ComponentActivity() {
                         ProductsEvents.PopBackStack -> {
                             navController.popBackStack()
                         }
+
+                        ProductsEvents.NavigateToSummaryScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductSummaryScreen.route)
+                        }
+
+                        ProductsEvents.NavigateToProductPicScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductPhotoUploadScreen.route)
+                        }
                     }
                 }
             }

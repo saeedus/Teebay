@@ -61,6 +61,24 @@ class ProductsViewModel(
                     _uiEvent.send(ProductsEvents.PopBackStack)
                 }
             }
+
+            UserAction.NextPressedFromCategoryScreen -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.NavigateToSummaryScreen)
+                }
+            }
+
+            UserAction.NextPressedFromSummaryScreen -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.NavigateToProductPicScreen)
+                }
+            }
+
+            is UserAction.ProductSummaryTyped -> {
+                _state.update {
+                    it.copy(productSummary = action.title)
+                }
+            }
         }
     }
 
