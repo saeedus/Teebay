@@ -154,7 +154,7 @@ class ProductsViewModel(
                 productImage = state.value.selectedImageUri!!,
                 purchasePrice = state.value.purchasePrice,
                 rentPrice = state.value.rentPrice,
-                rentOption = state.value.selectedRentalOption
+                rentOption = state.value.selectedRentalOption?.apiValue.orEmpty()
             ).collect {
                 when (it) {
                     is DataResult.Success -> {

@@ -6,6 +6,7 @@ package com.sazim.teebay.products.presentation
 
 import android.net.Uri
 import com.sazim.teebay.products.domain.model.Product
+import com.sazim.teebay.products.domain.utils.RentOption
 
 data class ProductsState(
     val isLoading: Boolean = false,
@@ -21,6 +22,6 @@ data class ProductsState(
     val rentPrice: String = "",
     val productSummary: String = "",
     val categories: List<String> = emptyList(),
-    val selectedRentalOption: String = "",
+    val selectedRentalOption: RentOption? = null,
     val selectedImageUri: ByteArray? = null
 )

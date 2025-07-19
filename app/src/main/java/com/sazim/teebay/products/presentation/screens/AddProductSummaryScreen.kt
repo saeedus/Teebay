@@ -92,7 +92,7 @@ fun AddProductSummaryScreen(
             modifier = Modifier.padding(bottom = 2.dp)
         )
         Text(
-            text = state.selectedRentalOption,
+            text = state.selectedRentalOption?.uiDisplay.orEmpty(),
             style = MaterialTheme.typography.titleMedium
         )
 

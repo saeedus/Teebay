@@ -5,6 +5,7 @@
 package com.sazim.teebay.products.presentation
 
 import android.net.Uri
+import com.sazim.teebay.products.domain.utils.RentOption
 
 sealed interface UserAction {
     data object Logout : UserAction
@@ -22,7 +23,7 @@ sealed interface UserAction {
     data object NextPressedFromSummaryScreen : UserAction
     data object NextPressedFromImgUpload : UserAction
     data object NextPressedFromPriceScreen : UserAction
-    data class RentOptionSelected(val option: String) : UserAction
+    data class RentOptionSelected(val option: RentOption) : UserAction
     data object AddProduct : UserAction
     data class ImageSelected(val byteArray: ByteArray?) : UserAction
 }

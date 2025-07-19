@@ -25,21 +25,22 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import com.sazim.teebay.products.domain.utils.RentOption
 
 @Composable
 fun SimpleSpinner(
     modifier: Modifier = Modifier,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit
+    selectedOption: RentOption,
+    onOptionSelected: (RentOption) -> Unit
 ) {
-    val options = listOf("Daily", "Hourly")
+    val options = RentOption.entries
     var expanded by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     Box(modifier = modifier) {
         OutlinedTextField(
-            value = selectedOption,
+            value = selectedOption.uiDisplay,
             onValueChange = {},
             label = { Text("Select option") },
             readOnly = true,
@@ -71,7 +72,7 @@ fun SimpleSpinner(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            option,
+                            option.uiDisplay,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                         )
                     },

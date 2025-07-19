@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sazim.teebay.core.presentation.ui.components.InputField
+import com.sazim.teebay.products.domain.utils.RentOption
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
@@ -84,7 +85,7 @@ fun AddProductPriceSelectionScreen(
         Spacer(Modifier.height(8.dp))
 
         SimpleSpinner(
-            selectedOption = state.selectedRentalOption,
+            selectedOption = state.selectedRentalOption ?: RentOption.PER_DAY,
             onOptionSelected = {
                 viewModel.onAction(UserAction.RentOptionSelected(it))
             }
@@ -95,7 +96,7 @@ fun AddProductPriceSelectionScreen(
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
             onNext = { viewModel.onAction(UserAction.NextPressedFromPriceScreen) },
-            isNextEnabled = state.purchasePrice.isNotBlank() && state.rentPrice.isNotBlank() && state.selectedRentalOption.isNotBlank()
+            isNextEnabled = state.purchasePrice.isNotBlank() && state.rentPrice.isNotBlank() && state.selectedRentalOption != null
         )
 
         Spacer(Modifier.height(32.dp))

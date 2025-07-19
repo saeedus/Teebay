@@ -16,3 +16,8 @@ fun uriToByteArray(context: Context, uri: Uri): ByteArray? {
         null
     }
 }
+
+enum class RentOption(val uiDisplay: String, val apiValue: String) {
+    PER_DAY("Per day", "day"),
+    PER_HOUR("Per hour", "hour");
+}

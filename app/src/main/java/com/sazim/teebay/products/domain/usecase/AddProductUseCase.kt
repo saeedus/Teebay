@@ -38,7 +38,7 @@ class AddProductUseCase(
                 append("rent_option", rentOption)
                 append("product_image", productImage, Headers.build {
                     append(HttpHeaders.ContentType, "image/png")
-                    append(HttpHeaders.ContentDisposition, "filename=\"${Timestamp.now()}\"")
+                    append(HttpHeaders.ContentDisposition, "filename=\"${Timestamp.now()}.png\"")
                 })
             }
         )
