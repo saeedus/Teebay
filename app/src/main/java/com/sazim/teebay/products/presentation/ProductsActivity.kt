@@ -88,8 +88,8 @@ class ProductsActivity : ComponentActivity() {
                             navController.popBackStack()
                         }
 
-                        ProductsEvents.NavigateToSummaryScreen -> {
-                            navController.navigate(ProductNavRoutes.AddProductSummaryScreen.route)
+                        ProductsEvents.NavigateToDescScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductDescScreen.route)
                         }
 
                         ProductsEvents.NavigateToProductPicScreen -> {
@@ -98,6 +98,11 @@ class ProductsActivity : ComponentActivity() {
 
                         ProductsEvents.NavigateToProductPriceScreen -> {
                             navController.navigate(ProductNavRoutes.AddProductPriceSelectionScreen.route)
+                        }
+
+                        ProductsEvents.NavigateToSummaryScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductSummaryScreen.route)
+
                         }
                     }
                 }

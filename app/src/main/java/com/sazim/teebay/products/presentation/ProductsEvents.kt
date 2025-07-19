@@ -9,6 +9,7 @@ sealed class ProductsEvents {
     data object PopBackStack : ProductsEvents()
     data class ShowToast(val message: String) : ProductsEvents()
     data object NavigateToCategorySelectScreen : ProductsEvents()
+    data object NavigateToDescScreen : ProductsEvents()
     data object NavigateToSummaryScreen : ProductsEvents()
     data object NavigateToProductPicScreen : ProductsEvents()
     data object NavigateToProductPriceScreen : ProductsEvents()

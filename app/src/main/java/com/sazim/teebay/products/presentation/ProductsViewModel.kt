@@ -64,7 +64,7 @@ class ProductsViewModel(
 
             UserAction.NextPressedFromCategoryScreen -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToSummaryScreen)
+                    _uiEvent.send(ProductsEvents.NavigateToDescScreen)
                 }
             }
 
