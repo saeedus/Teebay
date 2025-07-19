@@ -16,4 +16,6 @@ sealed interface UserAction {
     data class OnAddressTyped(val address: String) : UserAction
     data class OnPhoneNumberTyped(val phoneNumber: String) : UserAction
     data class OnConfirmPasswordTyped(val confirmPassword: String) : UserAction
+    object OnFingerprintSuccess : UserAction
+    object ShowFingerPrintPrompt : UserAction
 }

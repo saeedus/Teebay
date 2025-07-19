@@ -31,6 +31,10 @@ class AuthViewModel(
     private val _uiEvent = Channel<AuthEvents>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    init {
+        checkForFingerprintLogin()
+    }
+
     fun onAction(action: UserAction) {
         when (action) {
             is UserAction.OnEmailTyped -> {
@@ -72,6 +76,27 @@ class AuthViewModel(
             is UserAction.OnConfirmPasswordTyped -> {
                 _state.update { it.copy(confirmPassword = action.confirmPassword) }
             }
+
+            UserAction.OnFingerprintSuccess -> onFingerprintSuccess()
+
+            UserAction.ShowFingerPrintPrompt -> {
+                viewModelScope.launch {
+                    _uiEvent.send(AuthEvents.ShowFingerPrintPrompt)
+                }
+            }
+        }
+    }
+
+    private fun onFingerprintSuccess() {
+        viewModelScope.launch {
+            _uiEvent.send(AuthEvents.NavigateToMyProducts)
+        }
+    }
+
+    private fun checkForFingerprintLogin() {
+        if (sessionManager.isFingerprintLoginEnabled() && sessionManager.isLoggedIn()) {
+            _state.update { it.copy(shouldShowFingerprintPrompt = true) }
+            viewModelScope.launch { _uiEvent.send(AuthEvents.ShowFingerPrintPrompt) }
         }
     }
 

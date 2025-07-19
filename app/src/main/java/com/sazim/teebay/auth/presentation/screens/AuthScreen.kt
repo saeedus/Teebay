@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.auth.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,14 +18,19 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sazim.teebay.R
 import com.sazim.teebay.auth.presentation.AuthState
 import com.sazim.teebay.auth.presentation.AuthViewModel
@@ -132,6 +138,29 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         }
 
         Spacer(Modifier.height(20.dp))
+
+        if (state.shouldShowFingerprintPrompt) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                IconButton(onClick = {
+                    viewModel.onAction(UserAction.ShowFingerPrintPrompt)
+                }) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_fingerprint),
+                        contentDescription = "Fingerprint Authentication"
+                    )
+                }
+                Text(
+                    text = "Use Fingerprint",
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(Modifier.height(20.dp))
+        }
 
         AuthPrompt(
             promptText = stringResource(if (state.isLogin) R.string.dont_have_account else R.string.already_have_account),

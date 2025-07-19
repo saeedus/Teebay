@@ -6,4 +6,5 @@ package com.sazim.teebay.auth.presentation
 
 sealed interface AuthEvents {
     data object NavigateToMyProducts : AuthEvents
+    data object ShowFingerPrintPrompt : AuthEvents
 }
