@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (sessionManager.isLoggedIn() && sessionManager.isFingerprintLoginEnabled().not()) {
+        if (sessionManager.isLoggedIn() && sessionManager.isBiometricLoginEnabled().not()) {
             startActivity(Intent(this, ProductsActivity::class.java))
         } else {
             startActivity(Intent(this, AuthActivity::class.java))

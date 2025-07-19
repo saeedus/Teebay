@@ -28,17 +28,17 @@ class SessionManagerImpl(context: Context) : SessionManager {
         prefs.edit { clear() }
     }
 
-    override fun isFingerprintLoginEnabled(): Boolean {
-        return prefs.getBoolean(KEY_FINGERPRINT_ENABLED, false)
+    override fun isBiometricLoginEnabled(): Boolean {
+        return prefs.getBoolean(KEY_BIOMETRIC_ENABLED, false)
     }
 
-    override fun setFingerprintLoginEnabled(enabled: Boolean) {
-        prefs.edit { putBoolean(KEY_FINGERPRINT_ENABLED, enabled) }
+    override fun setBiometricLoginEnabled(enabled: Boolean) {
+        prefs.edit { putBoolean(KEY_BIOMETRIC_ENABLED, enabled) }
     }
 
     companion object {
         private const val PREFS_NAME = "auth_prefs"
         private const val KEY_AUTH_TOKEN = "auth_token"
-        private const val KEY_FINGERPRINT_ENABLED = "fingerprint_enabled"
+        private const val KEY_BIOMETRIC_ENABLED = "biometric_enabled"
     }
 }

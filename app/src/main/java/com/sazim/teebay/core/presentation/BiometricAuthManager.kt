@@ -6,11 +6,14 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 
-class FingerprintManager(private val context: Context) {
+class BiometricAuthManager(private val context: Context) {
 
     fun isBiometricSupported(): Boolean {
         val biometricManager = BiometricManager.from(context)
-        return biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+        // Check for BIOMETRIC_STRONG OR BIOMETRIC_WEAK
+        return biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.BIOMETRIC_WEAK
+        ) == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     fun showBiometricPrompt(
@@ -22,6 +25,7 @@ class FingerprintManager(private val context: Context) {
             .setTitle("Biometric login for Teebay")
             .setSubtitle("Log in using your biometric credential")
             .setNegativeButtonText("Use account password")
+            .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.BIOMETRIC_WEAK)
             .build()
 
         val biometricPrompt = BiometricPrompt(

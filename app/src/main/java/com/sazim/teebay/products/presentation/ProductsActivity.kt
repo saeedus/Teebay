@@ -86,10 +86,10 @@ class ProductsActivity : ComponentActivity() {
                         )
 
                         NavigationDrawerItem(
-                            label = { Text("Logout") },
+                            label = { Text("Biometric") },
                             selected = false,
                             onClick = {
-                                viewModel.onAction(UserAction.Logout)
+                                viewModel.onAction(UserAction.ToggleBiometric)
                                 scope.launch {
                                     drawerState.close()
                                 }
@@ -97,10 +97,10 @@ class ProductsActivity : ComponentActivity() {
                         )
 
                         NavigationDrawerItem(
-                            label = { Text("Fingerprint") },
+                            label = { Text("Logout") },
                             selected = false,
                             onClick = {
-                                viewModel.onAction(UserAction.Fingerprint)
+                                viewModel.onAction(UserAction.Logout)
                                 scope.launch {
                                     drawerState.close()
                                 }

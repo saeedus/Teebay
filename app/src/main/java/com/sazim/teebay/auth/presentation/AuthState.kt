@@ -14,5 +14,5 @@ data class AuthState(
     val address: String = "",
     val phoneNumber: String = "",
     val confirmPassword: String = "",
-    val shouldShowFingerprintPrompt: Boolean = false
+    val shouldShowBiometricPrompt: Boolean = false
 )

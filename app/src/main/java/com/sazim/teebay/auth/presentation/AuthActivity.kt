@@ -17,14 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.sazim.teebay.auth.presentation.navigation.AuthNavGraph
 import com.sazim.teebay.auth.presentation.navigation.AuthNavRoutes
-import com.sazim.teebay.core.presentation.FingerprintManager
+import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.presentation.ProductsActivity
 import org.koin.android.ext.android.inject
 import org.koin.compose.viewmodel.koinViewModel
 
 class AuthActivity : AppCompatActivity() {
 
-    private val fingerprintManager: FingerprintManager by inject()
+    private val biometricManager: BiometricAuthManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +40,8 @@ class AuthActivity : AppCompatActivity() {
                             navigateToProducts()
                         }
 
-                        AuthEvents.ShowFingerPrintPrompt -> {
-                            showFingerPrintPrompt { navigateToProducts() }
+                        AuthEvents.ShowBiometricPrompt -> {
+                            showBiometricPrompt { navigateToProducts() }
                         }
                     }
                 }
@@ -67,8 +67,8 @@ class AuthActivity : AppCompatActivity() {
         this@AuthActivity.startActivity(intent)
     }
 
-    private fun showFingerPrintPrompt(onSuccess: () -> Unit) {
-        fingerprintManager.showBiometricPrompt(
+    private fun showBiometricPrompt(onSuccess: () -> Unit) {
+        biometricManager.showBiometricPrompt(
             activity = this@AuthActivity,
             onSuccess = { onSuccess() },
             onError = { _, _ ->

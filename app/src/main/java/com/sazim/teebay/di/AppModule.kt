@@ -18,7 +18,7 @@ import com.sazim.teebay.products.presentation.ProductsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 
-import com.sazim.teebay.core.presentation.FingerprintManager
+import com.sazim.teebay.core.presentation.BiometricAuthManager
 
 val appModule = module {
     //ViewModels
@@ -43,6 +43,6 @@ val appModule = module {
     factory { LoginUseCase(get()) }
     factory { SignUpUseCase(get()) }
 
-    //fingerprint manager
-    factory { FingerprintManager(get()) }
+    //biometric manager
+    factory { BiometricAuthManager(get()) }
 }

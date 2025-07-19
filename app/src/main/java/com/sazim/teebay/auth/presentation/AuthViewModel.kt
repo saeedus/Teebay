@@ -32,7 +32,7 @@ class AuthViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        checkForFingerprintLogin()
+        checkForBiometricLogin()
     }
 
     fun onAction(action: UserAction) {
@@ -77,26 +77,26 @@ class AuthViewModel(
                 _state.update { it.copy(confirmPassword = action.confirmPassword) }
             }
 
-            UserAction.OnFingerprintSuccess -> onFingerprintSuccess()
+            UserAction.OnBiometricSuccess -> handleBiometricSuccess()
 
-            UserAction.ShowFingerPrintPrompt -> {
+            UserAction.ShowBiometricPrompt -> {
                 viewModelScope.launch {
-                    _uiEvent.send(AuthEvents.ShowFingerPrintPrompt)
+                    _uiEvent.send(AuthEvents.ShowBiometricPrompt)
                 }
             }
         }
     }
 
-    private fun onFingerprintSuccess() {
+    private fun handleBiometricSuccess() {
         viewModelScope.launch {
             _uiEvent.send(AuthEvents.NavigateToMyProducts)
         }
     }
 
-    private fun checkForFingerprintLogin() {
-        if (sessionManager.isFingerprintLoginEnabled() && sessionManager.isLoggedIn()) {
-            _state.update { it.copy(shouldShowFingerprintPrompt = true) }
-            viewModelScope.launch { _uiEvent.send(AuthEvents.ShowFingerPrintPrompt) }
+    private fun checkForBiometricLogin() {
+        if (sessionManager.isBiometricLoginEnabled() && sessionManager.isLoggedIn()) {
+            _state.update { it.copy(shouldShowBiometricPrompt = true) }
+            viewModelScope.launch { _uiEvent.send(AuthEvents.ShowBiometricPrompt) }
         }
     }
 

@@ -139,21 +139,21 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
 
         Spacer(Modifier.height(20.dp))
 
-        if (state.shouldShowFingerprintPrompt) {
+        if (state.shouldShowBiometricPrompt) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(8.dp)
             ) {
                 IconButton(onClick = {
-                    viewModel.onAction(UserAction.ShowFingerPrintPrompt)
+                    viewModel.onAction(UserAction.ShowBiometricPrompt)
                 }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_fingerprint),
-                        contentDescription = "Fingerprint Authentication"
+                        contentDescription = null
                     )
                 }
                 Text(
-                    text = "Use Fingerprint",
+                    text = "Use Biometric",
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center
                 )

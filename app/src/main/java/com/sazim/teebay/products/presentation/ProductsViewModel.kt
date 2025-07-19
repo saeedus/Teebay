@@ -7,6 +7,7 @@ package com.sazim.teebay.products.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
+import com.sazim.teebay.core.presentation.BiometricAuthManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class ProductsViewModel(
     private val sessionManager: SessionManager,
-    private val fingerprintManager: com.sazim.teebay.core.presentation.FingerprintManager
+    private val biometricManager: BiometricAuthManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProductsState())
@@ -27,21 +28,21 @@ class ProductsViewModel(
     fun onAction(action: UserAction) {
         when (action) {
             UserAction.Logout -> logout()
-            UserAction.Fingerprint -> toggleFingerprint()
+            UserAction.ToggleBiometric -> toggleBiometricLogin()
         }
     }
 
-    private fun toggleFingerprint() {
-        if (fingerprintManager.isBiometricSupported()) {
-            val isEnabled = sessionManager.isFingerprintLoginEnabled()
-            sessionManager.setFingerprintLoginEnabled(!isEnabled)
-            val message = if (!isEnabled) "Fingerprint login enabled" else "Fingerprint login disabled"
+    private fun toggleBiometricLogin() {
+        if (biometricManager.isBiometricSupported()) {
+            val isEnabled = sessionManager.isBiometricLoginEnabled()
+            sessionManager.setBiometricLoginEnabled(!isEnabled)
+            val message = if (!isEnabled) "Biometric login enabled" else "Biometric login disabled"
             viewModelScope.launch {
                 _uiEvent.send(ProductsEvents.ShowToast(message))
             }
         } else {
             viewModelScope.launch {
-                _uiEvent.send(ProductsEvents.ShowToast("Fingerprint not supported on this device"))
+                _uiEvent.send(ProductsEvents.ShowToast("Biometric not supported on this device"))
             }
         }
     }
