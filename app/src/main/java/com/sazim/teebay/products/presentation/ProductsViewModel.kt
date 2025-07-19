@@ -49,6 +49,12 @@ class ProductsViewModel(
                     _uiEvent.send(ProductsEvents.NavigateToCategorySelectScreen)
                 }
             }
+
+            is UserAction.CategoriesSelected -> {
+                _state.update {
+                    it.copy(categories = action.categories)
+                }
+            }
         }
     }
 

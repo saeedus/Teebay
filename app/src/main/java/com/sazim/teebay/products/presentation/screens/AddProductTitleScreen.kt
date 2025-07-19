@@ -64,6 +64,7 @@ fun AddProductTitleScreen(
         Spacer(Modifier.weight(2f))
 
         Button(
+            enabled = state.productTitle.isNotBlank(),
             onClick = {
                 viewModel.onAction(UserAction.NextPressedFromTitleScreen)
             },
