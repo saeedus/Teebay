@@ -5,13 +5,16 @@
 package com.sazim.teebay.auth.presentation.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -44,10 +47,14 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(state = rememberScrollState())
     ) {
         Text(
             text = stringResource(if (state.isLogin) R.string.sign_in else R.string.sign_up_title),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
