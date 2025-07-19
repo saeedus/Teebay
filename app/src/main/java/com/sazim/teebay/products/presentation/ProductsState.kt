@@ -11,5 +11,9 @@ data class ProductsState(
     val isBiometricEnabled: Boolean = false,
     val allProducts: List<Product> = emptyList(),
     val myProducts: List<Product> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+
+    //Add product
+    val totalStepsToAddProduct: Int = 6,
+    val productTitle: String = ""
 )

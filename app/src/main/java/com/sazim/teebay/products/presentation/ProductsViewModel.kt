@@ -38,6 +38,17 @@ class ProductsViewModel(
         when (action) {
             UserAction.Logout -> logout()
             UserAction.ToggleBiometric -> toggleBiometricLogin()
+            is UserAction.ProductTitleTyped -> {
+                _state.update {
+                    it.copy(productTitle = action.title)
+                }
+            }
+
+            UserAction.NextPressedFromTitleScreen -> {
+                viewModelScope.launch {
+                    _uiEvent.send(ProductsEvents.NavigateToCategorySelectScreen)
+                }
+            }
         }
     }
 

@@ -79,6 +79,10 @@ class ProductsActivity : ComponentActivity() {
                             Toast.makeText(this@ProductsActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
+
+                        ProductsEvents.NavigateToCategorySelectScreen -> {
+                            navController.navigate(ProductNavRoutes.AddProductCategoryScreen.route)
+                        }
                     }
                 }
             }
