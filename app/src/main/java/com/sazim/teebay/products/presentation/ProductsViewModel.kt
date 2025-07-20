@@ -124,6 +124,7 @@ class ProductsViewModel(
             UserAction.FetchAllProducts -> getAllProducts()
             UserAction.FetchMyProducts -> getMyProducts()
             UserAction.FetchCategories -> getCategories()
+            is UserAction.DeleteProduct -> deleteProduct()
         }
     }
 
@@ -201,6 +202,10 @@ class ProductsViewModel(
                 }
             }
         }
+    }
+
+    private fun deleteProduct() {
+        //TODO
     }
 
     private fun getMyProducts() {

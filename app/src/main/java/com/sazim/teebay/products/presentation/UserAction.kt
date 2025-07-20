@@ -29,4 +29,5 @@ sealed interface UserAction {
     data object AddProduct : UserAction
     data class ImageSelected(val byteArray: ByteArray?) : UserAction
     data object FetchCategories : UserAction
+    data class DeleteProduct(val productId: Int) : UserAction
 }
