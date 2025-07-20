@@ -23,8 +23,8 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
     override suspend fun getMyProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
         makeApiRequest<List<ProductDto>, List<Product>>(
             method = HttpMethod.Get,
-            endpoint = "products?userId=$userId",
-            transform = { it.map { it -> it.toDomain() } }
+            endpoint = "products/",
+            transform = { it.filter { it.seller == userId }.map { it -> it.toDomain() } }
         )
 
     override suspend fun getAllProducts(): Flow<DataResult<List<Product>, DataError.Network>> =
