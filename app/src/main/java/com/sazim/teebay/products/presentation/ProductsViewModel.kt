@@ -55,7 +55,7 @@ class ProductsViewModel(
 
             is UserAction.CategoriesSelected -> {
                 _state.update {
-                    it.copy(categories = action.selectedCategories)
+                    it.copy(selectedCategories = action.selectedCategories)
                 }
             }
 
@@ -157,7 +157,7 @@ class ProductsViewModel(
                 sellerId = sessionManager.getUserId() ?: -1,
                 title = state.value.productTitle,
                 description = state.value.productSummary,
-                selectedCategories = state.value.categories,
+                selectedCategories = state.value.selectedCategories,
                 productImage = state.value.selectedImageUri!!,
                 purchasePrice = state.value.purchasePrice,
                 rentPrice = state.value.rentPrice,

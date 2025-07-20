@@ -67,7 +67,7 @@ fun AddProductCategoryScreen(
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
             onNext = { viewModel.onAction(UserAction.NextPressedFromCategoryScreen) },
-            isNextEnabled = state.categories.isNotEmpty()
+            isNextEnabled = state.selectedCategories.isNotEmpty()
         )
 
         Spacer(Modifier.height(32.dp))

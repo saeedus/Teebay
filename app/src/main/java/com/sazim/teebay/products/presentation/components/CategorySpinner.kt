@@ -47,7 +47,7 @@ fun CategorySpinner(
 
     Box(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
-            value = if (selectedCategories.isEmpty()) "" else selectedCategories.joinToString(", "),
+            value = if (selectedCategories.isEmpty()) "" else selectedCategories.joinToString { it.label },
             onValueChange = {},
             readOnly = true,
             label = { Text("Select Categories") },

@@ -70,7 +70,7 @@ fun AddProductSummaryScreen(
         )
 
         Text(
-            text = "Categories:\n${state.categories.joinToString()}",
+            text = "Categories:\n${state.selectedCategories.joinToString { it.label }}",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 20.dp)
         )
