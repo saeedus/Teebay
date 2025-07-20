@@ -20,10 +20,10 @@ import kotlinx.coroutines.flow.Flow
 class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
     BaseRepository(apiConfig, httpClient),
     ProductRepository {
-    override suspend fun getMyProducts(sellerID: Int): Flow<DataResult<List<Product>, DataError.Network>> =
+    override suspend fun getMyProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
         makeApiRequest<List<ProductDto>, List<Product>>(
             method = HttpMethod.Get,
-            endpoint = "products/",
+            endpoint = "products?userId=$userId",
             transform = { it.map { it -> it.toDomain() } }
         )
 

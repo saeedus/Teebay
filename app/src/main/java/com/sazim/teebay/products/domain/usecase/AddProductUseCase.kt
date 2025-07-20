@@ -19,6 +19,7 @@ class AddProductUseCase(
     private val productRepository: ProductRepository
 ) {
     suspend operator fun invoke(
+        sellerId: Int,
         title: String,
         description: String,
         categories: List<String>,
@@ -29,7 +30,7 @@ class AddProductUseCase(
     ): Flow<DataResult<Product, DataError.Network>> {
         val formData = MultiPartFormDataContent(
             formData {
-                append("seller", 1)
+                append("seller", sellerId)
                 append("title", title)
                 append("description", description)
                 append("categories[]", categories)

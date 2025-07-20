@@ -11,6 +11,7 @@ import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,8 @@ class ProductsViewModel(
     private val sessionManager: SessionManager,
     private val biometricManager: BiometricAuthManager,
     private val getAllProductsUseCase: GetAllProductsUseCase,
-    private val addProductUseCase: AddProductUseCase
+    private val addProductUseCase: AddProductUseCase,
+    private val getMyProductsUseCase: GetMyProductsUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -110,6 +112,7 @@ class ProductsViewModel(
             }
 
             UserAction.AddProduct -> addProduct()
+
             is UserAction.ImageSelected -> {
                 _state.update {
                     it.copy(selectedImageUri = action.byteArray)
@@ -117,6 +120,7 @@ class ProductsViewModel(
             }
 
             UserAction.FetchAllProducts -> getAllProducts()
+            UserAction.FetchMyProducts -> getMyProducts()
         }
     }
 
@@ -147,6 +151,7 @@ class ProductsViewModel(
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             addProductUseCase(
+                sellerId = sessionManager.getUserId() ?: -1,
                 title = state.value.productTitle,
                 description = state.value.productSummary,
                 categories = state.value.categories,
@@ -181,6 +186,29 @@ class ProductsViewModel(
                         _state.update { it.copy(isLoading = false, error = null) }
                         _state.update { state ->
                             state.copy(allProducts = dataResult.data)
+                        }
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false) }
+                        _state.update { state ->
+                            state.copy(error = dataResult.error.toString())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getMyProducts() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getMyProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
+                        _state.update { state ->
+                            state.copy(myProducts = dataResult.data)
                         }
                     }
 

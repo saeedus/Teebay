@@ -11,6 +11,7 @@ sealed interface UserAction {
     data object ToggleBiometric : UserAction
     data object OnBackPressed : UserAction
     data object FetchAllProducts : UserAction
+    data object FetchMyProducts : UserAction
 
     //Add product
     data class ProductTitleTyped(val title: String) : UserAction

@@ -22,11 +22,12 @@ import com.sazim.teebay.products.data.repository.ProductRepositoryImpl
 import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { ProductsViewModel(get(), get(), get(), get()) }
+    viewModel { ProductsViewModel(get(), get(), get(), get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {
@@ -48,6 +49,7 @@ val appModule = module {
     factory { SignUpUseCase(get()) }
     factory { GetAllProductsUseCase(get()) }
     factory { AddProductUseCase(get()) }
+    factory { GetMyProductsUseCase(get()) }
 
     //biometric manager
     factory { BiometricAuthManager(get()) }
