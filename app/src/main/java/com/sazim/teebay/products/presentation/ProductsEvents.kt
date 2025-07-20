@@ -13,4 +13,5 @@ sealed class ProductsEvents {
     data object NavigateToSummaryScreen : ProductsEvents()
     data object NavigateToProductPicScreen : ProductsEvents()
     data object NavigateToProductPriceScreen : ProductsEvents()
+    data object NavigateToAllProductScreen : ProductsEvents()
 }

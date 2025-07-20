@@ -158,6 +158,8 @@ class ProductsViewModel(
                 when (dataResult) {
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false, error = null) }
+                        _uiEvent.send(ProductsEvents.ShowToast("Product added successfully"))
+                        _uiEvent.send(ProductsEvents.NavigateToAllProductScreen)
                     }
 
                     is DataResult.Error -> {

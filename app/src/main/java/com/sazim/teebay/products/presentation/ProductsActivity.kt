@@ -104,6 +104,13 @@ class ProductsActivity : ComponentActivity() {
                             navController.navigate(ProductNavRoutes.AddProductSummaryScreen.route)
 
                         }
+
+                        ProductsEvents.NavigateToAllProductScreen -> navController.navigate(
+                            ProductNavRoutes.AllProductsScreen.route
+                        ) {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 }
             }
