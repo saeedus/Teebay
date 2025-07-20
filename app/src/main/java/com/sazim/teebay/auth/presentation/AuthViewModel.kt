@@ -119,6 +119,7 @@ class AuthViewModel(
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false) }
                         sessionManager.saveAuthToken(result.data.user.firebaseConsoleManagerToken)
+                        sessionManager.saveUserId(result.data.user.id)
                         _uiEvent.send(AuthEvents.NavigateToMyProducts)
                         Log.d("LOGIN", "login: ${result.data}")
                     }
@@ -155,6 +156,7 @@ class AuthViewModel(
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false) }
                         sessionManager.saveAuthToken(result.data.firebaseConsoleManagerToken)
+                        sessionManager.saveUserId(result.data.id)
                         _uiEvent.send(AuthEvents.NavigateToMyProducts)
                         Log.d("SIGNUP", "signup: ${result.data}")
                     }

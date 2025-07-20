@@ -7,4 +7,6 @@ interface SessionManager {
     fun clearSession()
     fun isBiometricLoginEnabled(): Boolean
     fun setBiometricLoginEnabled(enabled: Boolean)
+    fun saveUserId(userId: Int)
+    fun getUserId(): Int?
 }

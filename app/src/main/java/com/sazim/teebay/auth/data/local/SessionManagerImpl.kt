@@ -36,9 +36,18 @@ class SessionManagerImpl(context: Context) : SessionManager {
         prefs.edit { putBoolean(KEY_BIOMETRIC_ENABLED, enabled) }
     }
 
+    override fun saveUserId(userId: Int) {
+        prefs.edit { putInt(KEY_USER_ID, userId) }
+    }
+
+    override fun getUserId(): Int? {
+        return prefs.getInt(KEY_USER_ID, -1)
+    }
+
     companion object {
         private const val PREFS_NAME = "auth_prefs"
         private const val KEY_AUTH_TOKEN = "auth_token"
         private const val KEY_BIOMETRIC_ENABLED = "biometric_enabled"
+        private const val KEY_USER_ID = "user_id"
     }
 }
