@@ -4,13 +4,13 @@
 
 package com.sazim.teebay.products.presentation
 
-import android.net.Uri
 import com.sazim.teebay.products.domain.utils.RentOption
 
 sealed interface UserAction {
     data object Logout : UserAction
     data object ToggleBiometric : UserAction
     data object OnBackPressed : UserAction
+    data object FetchAllProducts : UserAction
 
     //Add product
     data class ProductTitleTyped(val title: String) : UserAction

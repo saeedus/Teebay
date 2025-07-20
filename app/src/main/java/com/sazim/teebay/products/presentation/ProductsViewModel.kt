@@ -32,9 +32,6 @@ class ProductsViewModel(
     private val _uiEvent = Channel<ProductsEvents>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        getAllProducts()
-    }
 
     fun onAction(action: UserAction) {
         when (action) {
@@ -118,6 +115,8 @@ class ProductsViewModel(
                     it.copy(selectedImageUri = action.byteArray)
                 }
             }
+
+            UserAction.FetchAllProducts -> getAllProducts()
         }
     }
 
@@ -155,16 +154,15 @@ class ProductsViewModel(
                 purchasePrice = state.value.purchasePrice,
                 rentPrice = state.value.rentPrice,
                 rentOption = state.value.selectedRentalOption?.apiValue.orEmpty()
-            ).collect {
-                when (it) {
+            ).collect { dataResult ->
+                when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update { it.copy(isLoading = false) }
-                        getAllProducts()
+                        _state.update { it.copy(isLoading = false, error = null) }
                     }
 
                     is DataResult.Error -> {
                         _state.update { state ->
-                            state.copy(error = it.error.toString(), isLoading = false)
+                            state.copy(error = dataResult.error.toString(), isLoading = false)
                         }
                     }
                 }
@@ -173,18 +171,21 @@ class ProductsViewModel(
     }
 
     private fun getAllProducts() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            getAllProductsUseCase().collect {
-                when (it) {
+            getAllProductsUseCase().collect { dataResult ->
+                when (dataResult) {
                     is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
                         _state.update { state ->
-                            state.copy(allProducts = it.data)
+                            state.copy(allProducts = dataResult.data)
                         }
                     }
 
                     is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false) }
                         _state.update { state ->
-                            state.copy(error = it.error.toString())
+                            state.copy(error = dataResult.error.toString())
                         }
                     }
                 }

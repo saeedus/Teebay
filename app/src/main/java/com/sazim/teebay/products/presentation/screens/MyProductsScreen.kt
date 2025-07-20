@@ -35,18 +35,31 @@ fun MyProductsScreen(
                 .padding(vertical = 12.dp)
         )
 
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else if (state.error != null) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        } else {
-            LazyColumn {
-                items(state.myProducts) {
-                    ProductCard(product = it)
+        when {
+            state.isLoading -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
+
+            state.error != null -> {
+                Text(
+                    text = state.error,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+
+            state.myProducts.isEmpty() -> {
+                Text(
+                    text = "No products listed",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+
+            else -> {
+                LazyColumn {
+                    items(state.myProducts) {
+                        ProductCard(product = it)
+                    }
                 }
             }
         }

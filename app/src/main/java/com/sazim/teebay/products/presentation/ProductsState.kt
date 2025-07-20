@@ -4,7 +4,6 @@
 
 package com.sazim.teebay.products.presentation
 
-import android.net.Uri
 import com.sazim.teebay.products.domain.model.Product
 import com.sazim.teebay.products.domain.utils.RentOption
 
