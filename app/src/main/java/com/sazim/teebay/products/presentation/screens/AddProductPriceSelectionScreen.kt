@@ -85,7 +85,7 @@ fun AddProductPriceSelectionScreen(
         Spacer(Modifier.height(8.dp))
 
         SimpleSpinner(
-            selectedOption = state.selectedRentalOption ?: RentOption.PER_DAY,
+            selectedOption = state.selectedRentalOption,
             onOptionSelected = {
                 viewModel.onAction(UserAction.RentOptionSelected(it))
             }

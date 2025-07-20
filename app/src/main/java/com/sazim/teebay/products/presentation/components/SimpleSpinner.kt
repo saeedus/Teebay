@@ -30,7 +30,7 @@ import com.sazim.teebay.products.domain.utils.RentOption
 @Composable
 fun SimpleSpinner(
     modifier: Modifier = Modifier,
-    selectedOption: RentOption,
+    selectedOption: RentOption?,
     onOptionSelected: (RentOption) -> Unit
 ) {
     val options = RentOption.entries
@@ -40,7 +40,7 @@ fun SimpleSpinner(
 
     Box(modifier = modifier) {
         OutlinedTextField(
-            value = selectedOption.uiDisplay,
+            value = selectedOption?.uiDisplay ?: "",
             onValueChange = {},
             label = { Text("Select option") },
             readOnly = true,
