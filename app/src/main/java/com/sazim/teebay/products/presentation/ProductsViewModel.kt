@@ -10,9 +10,11 @@ import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
+import com.sazim.teebay.products.domain.usecase.DeleteProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
+import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,7 +28,8 @@ class ProductsViewModel(
     private val getAllProductsUseCase: GetAllProductsUseCase,
     private val addProductUseCase: AddProductUseCase,
     private val getMyProductsUseCase: GetMyProductsUseCase,
-    private val categoryUseCase: GetCategoriesUseCase
+    private val categoryUseCase: GetCategoriesUseCase,
+    private val deleteProductUseCase: DeleteProductUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -49,7 +52,7 @@ class ProductsViewModel(
 
             UserAction.NextPressedFromTitleScreen -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToCategorySelectScreen)
+                    _uiEvent.send(NavigateToCategorySelectScreen)
                 }
             }
 
@@ -61,19 +64,19 @@ class ProductsViewModel(
 
             UserAction.OnBackPressed -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.PopBackStack)
+                    _uiEvent.send(PopBackStack)
                 }
             }
 
             UserAction.NextPressedFromCategoryScreen -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToDescScreen)
+                    _uiEvent.send(NavigateToDescScreen)
                 }
             }
 
             UserAction.NextPressedFromSummaryScreen -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToProductPicScreen)
+                    _uiEvent.send(NavigateToProductPicScreen)
                 }
             }
 
@@ -85,7 +88,7 @@ class ProductsViewModel(
 
             UserAction.NextPressedFromImgUpload -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToProductPriceScreen)
+                    _uiEvent.send(NavigateToProductPriceScreen)
                 }
             }
 
@@ -109,7 +112,7 @@ class ProductsViewModel(
 
             UserAction.NextPressedFromPriceScreen -> {
                 viewModelScope.launch {
-                    _uiEvent.send(ProductsEvents.NavigateToSummaryScreen)
+                    _uiEvent.send(NavigateToSummaryScreen)
                 }
             }
 
@@ -124,7 +127,7 @@ class ProductsViewModel(
             UserAction.FetchAllProducts -> getAllProducts()
             UserAction.FetchMyProducts -> getMyProducts()
             UserAction.FetchCategories -> getCategories()
-            is UserAction.DeleteProduct -> deleteProduct()
+            is UserAction.DeleteProduct -> deleteProduct(action.productId)
         }
     }
 
@@ -135,11 +138,11 @@ class ProductsViewModel(
             _state.update { it.copy(isBiometricEnabled = !isEnabled) }
             val message = if (!isEnabled) "Biometric login enabled" else "Biometric login disabled"
             viewModelScope.launch {
-                _uiEvent.send(ProductsEvents.ShowToast(message))
+                _uiEvent.send(ShowToast(message))
             }
         } else {
             viewModelScope.launch {
-                _uiEvent.send(ProductsEvents.ShowToast("Biometric not supported on this device"))
+                _uiEvent.send(ShowToast("Biometric not supported on this device"))
             }
         }
     }
@@ -147,7 +150,7 @@ class ProductsViewModel(
     private fun logout() {
         sessionManager.clearSession()
         viewModelScope.launch {
-            _uiEvent.send(ProductsEvents.Logout)
+            _uiEvent.send(Logout)
         }
     }
 
@@ -167,8 +170,8 @@ class ProductsViewModel(
                 when (dataResult) {
                     is DataResult.Success -> {
                         _state.update { it.copy(isLoading = false, error = null) }
-                        _uiEvent.send(ProductsEvents.ShowToast("Product added successfully"))
-                        _uiEvent.send(ProductsEvents.NavigateToAllProductScreen)
+                        _uiEvent.send(ShowToast("Product added successfully"))
+                        _uiEvent.send(NavigateToAllProductScreen)
                     }
 
                     is DataResult.Error -> {
@@ -204,8 +207,28 @@ class ProductsViewModel(
         }
     }
 
-    private fun deleteProduct() {
-        //TODO
+    private fun deleteProduct(productId: Int) {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            deleteProductUseCase(productId).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
+                        _uiEvent.send(ShowToast("Product deleted successfully"))
+                        getMyProducts()
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun getMyProducts() {

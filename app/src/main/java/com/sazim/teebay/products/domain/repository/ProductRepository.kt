@@ -12,4 +12,5 @@ interface ProductRepository {
     suspend fun getAllProducts(): Flow<DataResult<List<Product>, DataError.Network>>
     suspend fun addProduct(formData: MultiPartFormDataContent): Flow<DataResult<Product, DataError.Network>>
     suspend fun getCategories(): Flow<DataResult<List<Category>, DataError.Network>>
+    suspend fun deleteProduct(id: Int): Flow<DataResult<Unit, DataError.Network>>
 }

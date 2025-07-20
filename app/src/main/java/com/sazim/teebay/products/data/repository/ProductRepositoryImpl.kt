@@ -26,7 +26,7 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         makeApiRequest<List<ProductDto>, List<Product>>(
             method = HttpMethod.Get,
             endpoint = "products/",
-            transform = { it.filter { it.seller == userId }.map { it -> it.toDomain() } }
+            transform = { it -> it.filter { it.seller == userId }.map { it -> it.toDomain() } }
         )
 
     override suspend fun getAllProducts(): Flow<DataResult<List<Product>, DataError.Network>> =
@@ -49,5 +49,12 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             method = HttpMethod.Get,
             endpoint = "products/categories/",
             transform = { it.map { it -> it.toDomain() } }
+        )
+
+    override suspend fun deleteProduct(id: Int): Flow<DataResult<Unit, DataError.Network>> =
+        makeApiRequest<Unit, Unit>(
+            method = HttpMethod.Delete,
+            endpoint = "products/${id}/",
+            transform = {}
         )
 }
