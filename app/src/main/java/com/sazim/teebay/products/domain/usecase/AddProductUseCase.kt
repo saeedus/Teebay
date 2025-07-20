@@ -7,6 +7,7 @@ package com.sazim.teebay.products.domain.usecase
 import com.google.firebase.Timestamp
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
+import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -22,7 +23,7 @@ class AddProductUseCase(
         sellerId: Int,
         title: String,
         description: String,
-        categories: List<String>,
+        selectedCategories: List<Category>,
         productImage: ByteArray,
         purchasePrice: String,
         rentPrice: String,
@@ -33,7 +34,9 @@ class AddProductUseCase(
                 append("seller", sellerId)
                 append("title", title)
                 append("description", description)
-                append("categories[]", categories)
+                selectedCategories.forEach { category ->
+                    append("categories", category.value)
+                }
                 append("purchase_price", purchasePrice)
                 append("rent_price", rentPrice)
                 append("rent_option", rentOption)

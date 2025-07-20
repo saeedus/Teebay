@@ -4,7 +4,9 @@
 
 package com.sazim.teebay.products.data.utils
 
+import com.sazim.teebay.products.data.dto.CategoryDto
 import com.sazim.teebay.products.data.dto.ProductDto
+import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.model.Product
 
 
@@ -20,5 +22,12 @@ fun ProductDto.toDomain(): Product {
         rentPrice = rentPrice,
         rentOption = rentOption,
         datePosted = datePosted
+    )
+}
+
+fun CategoryDto.toDomain(): Category {
+    return Category(
+        label = label,
+        value = value
     )
 }

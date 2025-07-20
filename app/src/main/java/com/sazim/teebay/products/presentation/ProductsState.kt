@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.products.presentation
 
+import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.model.Product
 import com.sazim.teebay.products.domain.utils.RentOption
 
@@ -20,7 +21,8 @@ data class ProductsState(
     val purchasePrice: String = "",
     val rentPrice: String = "",
     val productSummary: String = "",
-    val categories: List<String> = emptyList(),
+    val categories: List<Category> = emptyList(),
+    val selectedCategories: List<Category> = emptyList(),
     val selectedRentalOption: RentOption? = null,
     val selectedImageUri: ByteArray? = null
 )

@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.products.presentation
 
+import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.utils.RentOption
 
 sealed interface UserAction {
@@ -19,7 +20,7 @@ sealed interface UserAction {
     data class RentPriceTyped(val title: String) : UserAction
     data class ProductSummaryTyped(val title: String) : UserAction
     data object NextPressedFromTitleScreen : UserAction
-    data class CategoriesSelected(val categories: List<String>) : UserAction
+    data class CategoriesSelected(val selectedCategories: List<Category>) : UserAction
     data object NextPressedFromCategoryScreen : UserAction
     data object NextPressedFromSummaryScreen : UserAction
     data object NextPressedFromImgUpload : UserAction
@@ -27,4 +28,5 @@ sealed interface UserAction {
     data class RentOptionSelected(val option: RentOption) : UserAction
     data object AddProduct : UserAction
     data class ImageSelected(val byteArray: ByteArray?) : UserAction
+    data object FetchCategories : UserAction
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,10 @@ fun AddProductCategoryScreen(
     state: ProductsState,
     viewModel: ProductsViewModel
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.onAction(UserAction.FetchCategories)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,7 +57,8 @@ fun AddProductCategoryScreen(
         Spacer(Modifier.height(16.dp))
 
         CategorySpinner(
-            selectedCategories = state.categories,
+            selectedCategories = state.selectedCategories,
+            allCategories = state.categories,
             onCategoriesSelected = { viewModel.onAction(UserAction.CategoriesSelected(it)) }
         )
 

@@ -11,6 +11,7 @@ import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,8 @@ class ProductsViewModel(
     private val biometricManager: BiometricAuthManager,
     private val getAllProductsUseCase: GetAllProductsUseCase,
     private val addProductUseCase: AddProductUseCase,
-    private val getMyProductsUseCase: GetMyProductsUseCase
+    private val getMyProductsUseCase: GetMyProductsUseCase,
+    private val categoryUseCase: GetCategoriesUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -53,7 +55,7 @@ class ProductsViewModel(
 
             is UserAction.CategoriesSelected -> {
                 _state.update {
-                    it.copy(categories = action.categories)
+                    it.copy(categories = action.selectedCategories)
                 }
             }
 
@@ -121,6 +123,7 @@ class ProductsViewModel(
 
             UserAction.FetchAllProducts -> getAllProducts()
             UserAction.FetchMyProducts -> getMyProducts()
+            UserAction.FetchCategories -> getCategories()
         }
     }
 
@@ -154,7 +157,7 @@ class ProductsViewModel(
                 sellerId = sessionManager.getUserId() ?: -1,
                 title = state.value.productTitle,
                 description = state.value.productSummary,
-                categories = state.value.categories,
+                selectedCategories = state.value.categories,
                 productImage = state.value.selectedImageUri!!,
                 purchasePrice = state.value.purchasePrice,
                 rentPrice = state.value.rentPrice,
@@ -209,6 +212,29 @@ class ProductsViewModel(
                         _state.update { it.copy(isLoading = false, error = null) }
                         _state.update { state ->
                             state.copy(myProducts = dataResult.data)
+                        }
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false) }
+                        _state.update { state ->
+                            state.copy(error = dataResult.error.toString())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getCategories() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            categoryUseCase().collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
+                        _state.update { state ->
+                            state.copy(categories = dataResult.data)
                         }
                     }
 

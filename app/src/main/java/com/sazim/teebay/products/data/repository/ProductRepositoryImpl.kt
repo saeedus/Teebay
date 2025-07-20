@@ -8,8 +8,10 @@ import com.sazim.teebay.core.data.remote.ApiConfig
 import com.sazim.teebay.core.data.repository.BaseRepository
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
+import com.sazim.teebay.products.data.dto.CategoryDto
 import com.sazim.teebay.products.data.dto.ProductDto
 import com.sazim.teebay.products.data.utils.toDomain
+import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
 import io.ktor.client.HttpClient
@@ -40,5 +42,12 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             endpoint = "products/",
             requestBody = formData,
             transform = { it.toDomain() }
+        )
+
+    override suspend fun getCategories(): Flow<DataResult<List<Category>, DataError.Network>> =
+        makeApiRequest<List<CategoryDto>, List<Category>>(
+            method = HttpMethod.Get,
+            endpoint = "products/categories/",
+            transform = { it.map { it -> it.toDomain() } }
         )
 }

@@ -32,22 +32,15 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sazim.teebay.products.domain.model.Category
 
 @Composable
 fun CategorySpinner(
-    selectedCategories: List<String>,
-    onCategoriesSelected: (List<String>) -> Unit,
+    selectedCategories: List<Category>,
+    onCategoriesSelected: (List<Category>) -> Unit,
+    allCategories: List<Category>,
     modifier: Modifier = Modifier
 ) {
-    val allCategories = listOf(
-        "ELECTRONICS",
-        "FURNITURE",
-        "HOME APPLIANCES",
-        "SPORTING GOODS",
-        "OUTDOOR",
-        "TOYS"
-    )
-
     var expanded by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -92,7 +85,7 @@ fun CategorySpinner(
                                 onCheckedChange = null
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(category)
+                            Text(category.label)
                         }
                     },
                     onClick = {
