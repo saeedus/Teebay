@@ -57,4 +57,21 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             endpoint = "products/${id}/",
             transform = {}
         )
+
+    override suspend fun getProduct(id: Int): Flow<DataResult<Product, DataError.Network>> =
+        makeApiRequest<ProductDto, Product>(
+            method = HttpMethod.Get,
+            endpoint = "products/${id}/",
+            transform = { it.toDomain() }
+        )
+
+    override suspend fun updateProduct(
+        id: Int,
+        formData: MultiPartFormDataContent
+    ): Flow<DataResult<Product, DataError.Network>> = makeApiRequest<ProductDto, Product>(
+        method = HttpMethod.Put,
+        endpoint = "products/${id}/",
+        requestBody = formData,
+        transform = { it.toDomain() }
+    )
 }

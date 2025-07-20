@@ -111,6 +111,10 @@ class ProductsActivity : ComponentActivity() {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }
+
+                        is ProductsEvents.NavigateToEditProductScreen -> {
+                            navController.navigate(ProductNavRoutes.EditProductScreen.route)
+                        }
                     }
                 }
             }

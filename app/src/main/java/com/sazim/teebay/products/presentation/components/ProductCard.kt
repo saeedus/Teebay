@@ -28,6 +28,7 @@ import com.sazim.teebay.products.domain.model.Product
 fun ProductCard(
     product: Product,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
     Card(
@@ -36,7 +37,8 @@ fun ProductCard(
             .padding(16.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onLongPress = { onLongClick() }
+                    onLongPress = { onLongClick() },
+                    onTap = { onClick() }
                 )
             },
         shape = RoundedCornerShape(8.dp),

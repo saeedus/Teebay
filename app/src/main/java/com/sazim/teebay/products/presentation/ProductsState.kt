@@ -14,6 +14,7 @@ data class ProductsState(
     val allProducts: List<Product> = emptyList(),
     val myProducts: List<Product> = emptyList(),
     val error: String? = null,
+    val selectedProduct: Product? = null,
 
     //Add product
     val totalStepsToAddProduct: Int = 6,

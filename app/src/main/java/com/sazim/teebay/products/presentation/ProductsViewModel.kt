@@ -14,8 +14,12 @@ import com.sazim.teebay.products.domain.usecase.DeleteProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetProductUseCase
+import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
 import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -29,7 +33,9 @@ class ProductsViewModel(
     private val addProductUseCase: AddProductUseCase,
     private val getMyProductsUseCase: GetMyProductsUseCase,
     private val categoryUseCase: GetCategoriesUseCase,
-    private val deleteProductUseCase: DeleteProductUseCase
+    private val deleteProductUseCase: DeleteProductUseCase,
+    private val getProductUseCase: GetProductUseCase,
+    private val updateProductUseCase: UpdateProductUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -128,6 +134,17 @@ class ProductsViewModel(
             UserAction.FetchMyProducts -> getMyProducts()
             UserAction.FetchCategories -> getCategories()
             is UserAction.DeleteProduct -> deleteProduct(action.productId)
+            is UserAction.ProductSelected -> {
+                _state.update {
+                    it.copy(selectedProduct = action.product)
+                }
+                viewModelScope.launch {
+                    _uiEvent.send(NavigateToEditProductScreen(action.product.id))
+                }
+            }
+
+            is UserAction.FetchProduct -> fetchProduct(action.productId)
+            UserAction.UpdateProduct -> updateProduct()
         }
     }
 
@@ -270,6 +287,81 @@ class ProductsViewModel(
                         _state.update { it.copy(isLoading = false) }
                         _state.update { state ->
                             state.copy(error = dataResult.error.toString())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchProduct(productId: Int) {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getProductUseCase(productId).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                selectedProduct = dataResult.data
+                            )
+                        }
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateProduct() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            val product = _state.value.selectedProduct
+            if (product != null) {
+                updateProductUseCase(
+                    productId = product.id,
+                    formData = MultiPartFormDataContent(
+                        formData {
+                            append("title", _state.value.productTitle.ifEmpty { product.title })
+                            append(
+                                "description",
+                                _state.value.productSummary.ifEmpty { product.description })
+                            append(
+                                "purchasePrice",
+                                _state.value.purchasePrice.ifEmpty { product.purchasePrice })
+                            append(
+                                "rentPrice",
+                                _state.value.rentPrice.ifEmpty { product.rentPrice })
+                            append(
+                                "rentOption",
+                                _state.value.selectedRentalOption?.apiValue.orEmpty()
+                            )
+                        }
+                    )
+                ).collect { dataResult ->
+                    when (dataResult) {
+                        is DataResult.Success -> {
+                            _state.update { it.copy(isLoading = false, error = null) }
+                            _uiEvent.send(ShowToast("Product updated successfully"))
+                            _uiEvent.send(PopBackStack)
+                        }
+
+                        is DataResult.Error -> {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    error = dataResult.error.toString()
+                                )
+                            }
                         }
                     }
                 }

@@ -14,4 +14,5 @@ sealed class ProductsEvents {
     data object NavigateToProductPicScreen : ProductsEvents()
     data object NavigateToProductPriceScreen : ProductsEvents()
     data object NavigateToAllProductScreen : ProductsEvents()
+    data class NavigateToEditProductScreen(val productId: Int) : ProductsEvents()
 }

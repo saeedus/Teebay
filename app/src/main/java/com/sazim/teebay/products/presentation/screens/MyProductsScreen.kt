@@ -86,11 +86,17 @@ fun MyProductsScreen(
 
             else -> {
                 LazyColumn {
-                    items(state.myProducts) {
+                    items(state.myProducts) { product ->
                         ProductCard(
-                            product = it,
+                            product = product,
+                            onClick = {
+                                selectedProduct = product
+                                viewModel.onAction(
+                                    UserAction.ProductSelected(selectedProduct as Product)
+                                )
+                            },
                             onLongClick = {
-                                selectedProduct = it
+                                selectedProduct = product
                                 showDialog = true
                             })
                     }

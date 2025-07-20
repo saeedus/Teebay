@@ -5,6 +5,7 @@
 package com.sazim.teebay.products.presentation
 
 import com.sazim.teebay.products.domain.model.Category
+import com.sazim.teebay.products.domain.model.Product
 import com.sazim.teebay.products.domain.utils.RentOption
 
 sealed interface UserAction {
@@ -30,4 +31,7 @@ sealed interface UserAction {
     data class ImageSelected(val byteArray: ByteArray?) : UserAction
     data object FetchCategories : UserAction
     data class DeleteProduct(val productId: Int) : UserAction
+    data class ProductSelected(val product: Product) : UserAction
+    data class FetchProduct(val productId: Int) : UserAction
+    data object UpdateProduct : UserAction
 }

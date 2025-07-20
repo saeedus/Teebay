@@ -25,11 +25,13 @@ import com.sazim.teebay.products.domain.usecase.DeleteProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetProductUseCase
+import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
 
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
-    viewModel { ProductsViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { ProductsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { ApiConfig(BuildConfig.BASE_URL) }
     single<HttpClient> {
@@ -54,6 +56,8 @@ val appModule = module {
     factory { GetMyProductsUseCase(get()) }
     factory { GetCategoriesUseCase(get()) }
     factory { DeleteProductUseCase(get()) }
+    factory { GetProductUseCase(get()) }
+    factory { UpdateProductUseCase(get()) }
 
     //biometric manager
     factory { BiometricAuthManager(get()) }

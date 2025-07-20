@@ -18,6 +18,7 @@ import com.sazim.teebay.products.presentation.screens.AddProductPhotoUploadScree
 import com.sazim.teebay.products.presentation.screens.AddProductPriceSelectionScreen
 import com.sazim.teebay.products.presentation.screens.AddProductSummaryScreen
 import com.sazim.teebay.products.presentation.screens.AddProductTitleScreen
+import com.sazim.teebay.products.presentation.screens.EditProductScreen
 import com.sazim.teebay.products.presentation.screens.MyProductsScreen
 
 @Composable
@@ -66,6 +67,14 @@ fun ProductNavGraph(
 
         composable(route = ProductNavRoutes.AddProductSummaryScreen.route) {
             AddProductSummaryScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(route = ProductNavRoutes.EditProductScreen.route) {
+            EditProductScreen(
+                modifier = modifier,
+                state = state,
+                viewModel = viewModel
+            )
         }
 
     }
