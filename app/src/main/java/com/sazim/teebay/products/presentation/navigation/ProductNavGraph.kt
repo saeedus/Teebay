@@ -19,6 +19,7 @@ import com.sazim.teebay.products.presentation.screens.AddProductPriceSelectionSc
 import com.sazim.teebay.products.presentation.screens.AddProductSummaryScreen
 import com.sazim.teebay.products.presentation.screens.AddProductTitleScreen
 import com.sazim.teebay.products.presentation.screens.EditProductScreen
+import com.sazim.teebay.products.presentation.screens.MyDealsScreen
 import com.sazim.teebay.products.presentation.screens.MyProductsScreen
 
 @Composable
