@@ -308,7 +308,11 @@ class ProductsViewModel(
                             it.copy(
                                 isLoading = false,
                                 error = null,
-                                selectedProduct = dataResult.data
+                                selectedProduct = dataResult.data,
+                                productTitle = "",
+                                productSummary = "",
+                                purchasePrice = "",
+                                rentPrice = ""
                             )
                         }
                     }
