@@ -16,6 +16,7 @@ import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetProductUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
+import com.sazim.teebay.products.domain.utils.RentOption
 import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
 import io.ktor.client.request.forms.MultiPartFormDataContent
