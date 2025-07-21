@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.sazim.teebay.products.presentation.screens.AllProductScreen
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.screens.AddProductCategoryScreen
@@ -18,9 +17,11 @@ import com.sazim.teebay.products.presentation.screens.AddProductPhotoUploadScree
 import com.sazim.teebay.products.presentation.screens.AddProductPriceSelectionScreen
 import com.sazim.teebay.products.presentation.screens.AddProductSummaryScreen
 import com.sazim.teebay.products.presentation.screens.AddProductTitleScreen
+import com.sazim.teebay.products.presentation.screens.AllProductScreen
 import com.sazim.teebay.products.presentation.screens.EditProductScreen
 import com.sazim.teebay.products.presentation.screens.MyDealsScreen
 import com.sazim.teebay.products.presentation.screens.MyProductsScreen
+import com.sazim.teebay.products.presentation.screens.ProductDetailScreen
 
 @Composable
 fun ProductNavGraph(
@@ -39,11 +40,21 @@ fun ProductNavGraph(
         }
 
         composable(route = ProductNavRoutes.AllProductsScreen.route) {
-            AllProductScreen(modifier = modifier, state = state, viewModel = viewModel)
+            AllProductScreen(
+                modifier = modifier,
+                state = state,
+                viewModel = viewModel
+            )
         }
 
         composable(route = ProductNavRoutes.AddProductTitleScreen.route) {
             AddProductTitleScreen(modifier = modifier, state = state, viewModel = viewModel)
+        }
+
+        composable(
+            route = ProductNavRoutes.ProductDetailScreen.route
+        ) {
+            ProductDetailScreen(modifier = modifier, viewModel = viewModel, state = state)
         }
 
         composable(route = ProductNavRoutes.AddProductCategoryScreen.route) {

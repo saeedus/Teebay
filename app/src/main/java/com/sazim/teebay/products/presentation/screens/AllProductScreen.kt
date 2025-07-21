@@ -59,8 +59,13 @@ fun AllProductScreen(
 
             else -> {
                 LazyColumn {
-                    items(state.allProducts) {
-                        ProductCard(product = it)
+                    items(state.allProducts) { product ->
+                        ProductCard(
+                            product = product,
+                            onClick = {
+                                viewModel.onAction(UserAction.ViewedProductFromAllProducts(product))
+                            }
+                        )
                     }
                 }
             }

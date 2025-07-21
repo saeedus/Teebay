@@ -14,6 +14,7 @@ sealed interface UserAction {
     data object OnBackPressed : UserAction
     data object FetchAllProducts : UserAction
     data object FetchMyProducts : UserAction
+    data class ViewedProductFromAllProducts(val product: Product) : UserAction
 
     //Add product
     data class ProductTitleTyped(val title: String) : UserAction

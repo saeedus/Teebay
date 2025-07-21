@@ -27,7 +27,7 @@ fun EditProductScreen(
     state: ProductsState,
     viewModel: ProductsViewModel
 ) {
-    LaunchedEffect(state.selectedProduct?.id) {
+    LaunchedEffect(Unit) {
         viewModel.onAction(UserAction.FetchProduct(state.selectedProduct?.id ?: -1))
         viewModel.onAction(UserAction.FetchCategories)
     }

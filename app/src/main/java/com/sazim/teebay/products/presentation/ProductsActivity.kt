@@ -115,6 +115,10 @@ class ProductsActivity : ComponentActivity() {
                         is ProductsEvents.NavigateToEditProductScreen -> {
                             navController.navigate(ProductNavRoutes.EditProductScreen.route)
                         }
+
+                        ProductsEvents.NavigateToProductDetailScreen -> {
+                            navController.navigate(ProductNavRoutes.ProductDetailScreen.route)
+                        }
                     }
                 }
             }

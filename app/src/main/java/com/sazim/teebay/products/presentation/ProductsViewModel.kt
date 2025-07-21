@@ -147,6 +147,14 @@ class ProductsViewModel(
 
             is UserAction.FetchProduct -> fetchProduct(action.productId)
             UserAction.UpdateProduct -> updateProduct()
+            is UserAction.ViewedProductFromAllProducts -> {
+                _state.update {
+                    it.copy(selectedProduct = action.product)
+                }
+                viewModelScope.launch {
+                    _uiEvent.send(NavigateToProductDetailScreen)
+                }
+            }
         }
     }
 
