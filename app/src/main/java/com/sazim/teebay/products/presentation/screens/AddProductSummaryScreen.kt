@@ -52,7 +52,7 @@ fun AddProductSummaryScreen(
 
         Spacer(Modifier.height(20.dp))
 
-        state.selectedImageUri?.let { uri ->
+        state.selectedImageByteArray?.let { uri ->
             AsyncImage(
                 model = uri,
                 contentDescription = "Selected Image",

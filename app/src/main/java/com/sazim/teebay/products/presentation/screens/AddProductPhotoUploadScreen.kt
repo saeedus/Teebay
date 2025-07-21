@@ -101,7 +101,7 @@ fun AddProductPhotoUploadScreen(
             Text(text = "Upload Picture from Gallery")
         }
 
-        state.selectedImageUri?.let { uri ->
+        state.selectedImageByteArray?.let { uri ->
             Spacer(Modifier.height(16.dp))
             AsyncImage(
                 model = uri,
@@ -117,7 +117,7 @@ fun AddProductPhotoUploadScreen(
         BackNextNavigationRow(
             onBack = { viewModel.onAction(UserAction.OnBackPressed) },
             onNext = { viewModel.onAction(UserAction.NextPressedFromImgUpload) },
-            isNextEnabled = state.selectedImageUri != null
+            isNextEnabled = state.selectedImageByteArray != null
         )
 
         Spacer(Modifier.height(32.dp))

@@ -6,6 +6,7 @@ package com.sazim.teebay.products.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
@@ -20,6 +21,9 @@ import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.utils.io.InternalAPI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -126,7 +130,7 @@ class ProductsViewModel(
 
             is UserAction.ImageSelected -> {
                 _state.update {
-                    it.copy(selectedImageUri = action.byteArray)
+                    it.copy(selectedImageByteArray = action.byteArray)
                 }
             }
 
@@ -179,7 +183,7 @@ class ProductsViewModel(
                 title = state.value.productTitle,
                 description = state.value.productSummary,
                 selectedCategories = state.value.selectedCategories,
-                productImage = state.value.selectedImageUri!!,
+                productImage = state.value.selectedImageByteArray!!,
                 purchasePrice = state.value.purchasePrice,
                 rentPrice = state.value.rentPrice,
                 rentOption = state.value.selectedRentalOption?.apiValue.orEmpty()
@@ -322,6 +326,7 @@ class ProductsViewModel(
         }
     }
 
+    @OptIn(InternalAPI::class)
     private fun updateProduct() {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
@@ -331,19 +336,24 @@ class ProductsViewModel(
                     productId = product.id,
                     formData = MultiPartFormDataContent(
                         formData {
+                            append("seller", sessionManager.getUserId() ?: -1)
                             append("title", _state.value.productTitle.ifEmpty { product.title })
                             append(
                                 "description",
                                 _state.value.productSummary.ifEmpty { product.description })
+                            _state.value.selectedCategories.forEach { category ->
+                                append("categories", category.value)
+                            }
                             append(
-                                "purchasePrice",
+                                "purchase_price",
                                 _state.value.purchasePrice.ifEmpty { product.purchasePrice })
                             append(
-                                "rentPrice",
+                                "rent_price",
                                 _state.value.rentPrice.ifEmpty { product.rentPrice })
                             append(
-                                "rentOption",
-                                _state.value.selectedRentalOption?.apiValue.orEmpty()
+                                "rent_option",
+                                _state.value.selectedRentalOption?.apiValue?.ifEmpty { product.rentOption }
+                                    ?: product.rentOption
                             )
                         }
                     )

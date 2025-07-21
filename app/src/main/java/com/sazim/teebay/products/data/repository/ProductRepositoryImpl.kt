@@ -69,7 +69,7 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         id: Int,
         formData: MultiPartFormDataContent
     ): Flow<DataResult<Product, DataError.Network>> = makeApiRequest<ProductDto, Product>(
-        method = HttpMethod.Put,
+        method = HttpMethod.Patch,
         endpoint = "products/${id}/",
         requestBody = formData,
         transform = { it.toDomain() }

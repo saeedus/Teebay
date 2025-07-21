@@ -25,5 +25,5 @@ data class ProductsState(
     val categories: List<Category> = emptyList(),
     val selectedCategories: List<Category> = emptyList(),
     val selectedRentalOption: RentOption? = null,
-    val selectedImageUri: ByteArray? = null
+    val selectedImageByteArray: ByteArray? = null
 )
