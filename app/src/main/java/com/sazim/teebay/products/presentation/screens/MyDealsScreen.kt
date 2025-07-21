@@ -1,6 +1,5 @@
 package com.sazim.teebay.products.presentation.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -12,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import com.sazim.teebay.R
 import kotlinx.coroutines.launch
 
 sealed class MyDealsTab(val title: String) {
@@ -21,14 +22,13 @@ sealed class MyDealsTab(val title: String) {
     data object Lent : MyDealsTab("Lent")
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyDealsScreen() {
+fun MyDealsScreen(modifier: Modifier = Modifier) {
     val tabs = listOf(MyDealsTab.Bought, MyDealsTab.Sold, MyDealsTab.Borrowed, MyDealsTab.Lent)
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = pagerState.currentPage) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
@@ -38,25 +38,35 @@ fun MyDealsScreen() {
                             pagerState.animateScrollToPage(index)
                         }
                     },
-                    text = { Text(tab.title) }
+                    text = {
+                        Text(
+                            tab.title, style = MaterialTheme.typography.titleSmall.copy(
+                                color = colorResource(
+                                    R.color.black
+                                )
+                            )
+                        )
+                    }
                 )
             }
         }
 
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
-            page ->
+        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
             when (tabs[page]) {
                 MyDealsTab.Bought -> {
-                    Text("Bought Products", style = MaterialTheme.typography.headlineMedium)
+                    Text("Bought", style = MaterialTheme.typography.headlineMedium)
                 }
+
                 MyDealsTab.Sold -> {
-                    Text("Sold Products", style = MaterialTheme.typography.headlineMedium)
+                    Text("Sold", style = MaterialTheme.typography.headlineMedium)
                 }
+
                 MyDealsTab.Borrowed -> {
-                    Text("Borrowed Products", style = MaterialTheme.typography.headlineMedium)
+                    Text("Borrowed", style = MaterialTheme.typography.headlineMedium)
                 }
+
                 MyDealsTab.Lent -> {
-                    Text("Lent Products", style = MaterialTheme.typography.headlineMedium)
+                    Text("Lent", style = MaterialTheme.typography.headlineMedium)
                 }
             }
         }

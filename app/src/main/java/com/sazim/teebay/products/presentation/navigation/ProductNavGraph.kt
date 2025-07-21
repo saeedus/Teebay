@@ -79,7 +79,7 @@ fun ProductNavGraph(
         }
 
         composable(route = ProductNavRoutes.MyDealsScreen.route) {
-            MyDealsScreen()
+            MyDealsScreen(modifier = modifier)
         }
 
     }
