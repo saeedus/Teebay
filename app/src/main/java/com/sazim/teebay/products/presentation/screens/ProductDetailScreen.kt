@@ -25,6 +25,7 @@ fun ProductDetailScreen(
 ) {
 
     LaunchedEffect(Unit) {
+        viewModel.onAction(UserAction.FetchCategories)
         viewModel.onAction(UserAction.FetchProduct(state.selectedProduct?.id ?: -1))
     }
 
@@ -35,10 +36,13 @@ fun ProductDetailScreen(
     ) {
         Text(text = state.productTitle, style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Category: ${state.selectedCategories}", style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = "Category: ${state.selectedCategories.map { it.label }}",
+            style = MaterialTheme.typography.bodyLarge
+        )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Rent Price: $${state.rentPrice} ${state.selectedRentalOption}",
+            text = "Rent Price: $${state.rentPrice} ${state.selectedRentalOption?.uiDisplay}",
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
