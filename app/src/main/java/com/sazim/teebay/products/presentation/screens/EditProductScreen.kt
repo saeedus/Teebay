@@ -18,6 +18,8 @@ import com.sazim.teebay.core.presentation.ui.components.InputField
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.UserAction
+import com.sazim.teebay.products.presentation.components.CategorySpinner
+import com.sazim.teebay.products.presentation.components.SimpleSpinner
 
 @Composable
 fun EditProductScreen(
@@ -25,8 +27,9 @@ fun EditProductScreen(
     state: ProductsState,
     viewModel: ProductsViewModel
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(state.selectedProduct?.id) {
         viewModel.onAction(UserAction.FetchProduct(state.selectedProduct?.id ?: -1))
+        viewModel.onAction(UserAction.FetchCategories)
     }
 
     Column(
@@ -63,7 +66,7 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.productSummary.ifEmpty { state.selectedProduct.description },
+                    value = state.productDesc.ifEmpty { state.selectedProduct.description },
                     onValueChange = {
                         viewModel.onAction(UserAction.ProductSummaryTyped(it))
                     },
@@ -71,7 +74,7 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.purchasePrice.ifEmpty { state.selectedProduct.purchasePrice.toString() },
+                    value = state.purchasePrice.ifEmpty { state.selectedProduct.purchasePrice },
                     onValueChange = {
                         viewModel.onAction(UserAction.PurchasePriceTyped(it))
                     },
@@ -79,11 +82,26 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.rentPrice.ifEmpty { state.selectedProduct.rentPrice.toString() },
+                    value = state.rentPrice.ifEmpty { state.selectedProduct.rentPrice },
                     onValueChange = {
                         viewModel.onAction(UserAction.RentPriceTyped(it))
                     },
                     label = "Rent Price"
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                CategorySpinner(
+                    selectedCategories = state.selectedCategories,
+                    onCategoriesSelected = {
+                        viewModel.onAction(UserAction.CategoriesSelected(it))
+                    },
+                    allCategories = state.categories
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                SimpleSpinner(
+                    selectedOption = state.selectedRentalOption,
+                    onOptionSelected = {
+                        viewModel.onAction(UserAction.RentOptionSelected(it))
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {

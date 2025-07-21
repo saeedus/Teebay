@@ -6,7 +6,6 @@ package com.sazim.teebay.products.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Timestamp
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
@@ -21,8 +20,6 @@ import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.http.Headers
-import io.ktor.http.HttpHeaders
 import io.ktor.utils.io.InternalAPI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -92,7 +89,7 @@ class ProductsViewModel(
 
             is UserAction.ProductSummaryTyped -> {
                 _state.update {
-                    it.copy(productSummary = action.title)
+                    it.copy(productDesc = action.title)
                 }
             }
 
@@ -181,7 +178,7 @@ class ProductsViewModel(
             addProductUseCase(
                 sellerId = sessionManager.getUserId() ?: -1,
                 title = state.value.productTitle,
-                description = state.value.productSummary,
+                description = state.value.productDesc,
                 selectedCategories = state.value.selectedCategories,
                 productImage = state.value.selectedImageByteArray!!,
                 purchasePrice = state.value.purchasePrice,
@@ -310,9 +307,11 @@ class ProductsViewModel(
                                 error = null,
                                 selectedProduct = dataResult.data,
                                 productTitle = "",
-                                productSummary = "",
+                                productDesc = "",
                                 purchasePrice = "",
-                                rentPrice = ""
+                                rentPrice = "",
+                                selectedCategories = emptyList(),
+                                selectedRentalOption = null
                             )
                         }
                     }
@@ -344,7 +343,7 @@ class ProductsViewModel(
                             append("title", _state.value.productTitle.ifEmpty { product.title })
                             append(
                                 "description",
-                                _state.value.productSummary.ifEmpty { product.description })
+                                _state.value.productDesc.ifEmpty { product.description })
                             _state.value.selectedCategories.forEach { category ->
                                 append("categories", category.value)
                             }

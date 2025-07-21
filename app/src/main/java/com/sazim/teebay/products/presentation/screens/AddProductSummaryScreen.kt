@@ -76,7 +76,7 @@ fun AddProductSummaryScreen(
         )
 
         Text(
-            text = "Description: ${state.productSummary}",
+            text = "Description: ${state.productDesc}",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 20.dp)
         )

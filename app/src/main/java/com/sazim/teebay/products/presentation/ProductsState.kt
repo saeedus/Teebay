@@ -21,7 +21,7 @@ data class ProductsState(
     val productTitle: String = "",
     val purchasePrice: String = "",
     val rentPrice: String = "",
-    val productSummary: String = "",
+    val productDesc: String = "",
     val categories: List<Category> = emptyList(),
     val selectedCategories: List<Category> = emptyList(),
     val selectedRentalOption: RentOption? = null,

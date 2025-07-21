@@ -52,7 +52,7 @@ fun AddProductDescScreen(
         Spacer(Modifier.height(16.dp))
 
         InputField(
-            value = state.productSummary,
+            value = state.productDesc,
             singleLine = false,
             maxLines = 5,
             height = 120.dp,
@@ -71,7 +71,7 @@ fun AddProductDescScreen(
             onNext = {
                 viewModel.onAction(UserAction.NextPressedFromSummaryScreen)
             },
-            isNextEnabled = state.productSummary.isNotBlank()
+            isNextEnabled = state.productDesc.isNotBlank()
         )
 
         Spacer(Modifier.height(32.dp))
