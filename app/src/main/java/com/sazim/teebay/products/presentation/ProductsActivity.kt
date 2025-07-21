@@ -157,6 +157,21 @@ class ProductsActivity : ComponentActivity() {
 
                         NavigationDrawerItem(
                             label = {
+                                Text(
+                                    "My Deals",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate(ProductNavRoutes.MyDealsScreen.route)
+                            }
+                        )
+
+                        NavigationDrawerItem(
+                            label = {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,

@@ -14,4 +14,5 @@ sealed class ProductNavRoutes(val route: String) {
     data object AddProductPriceSelectionScreen : ProductNavRoutes("add_product_price_selection")
     data object AddProductSummaryScreen : ProductNavRoutes("add_product_summary")
     data object EditProductScreen : ProductNavRoutes("edit_product")
+    data object MyDealsScreen : ProductNavRoutes("my_deals")
 }
