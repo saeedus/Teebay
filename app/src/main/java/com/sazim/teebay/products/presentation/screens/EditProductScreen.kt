@@ -58,7 +58,7 @@ fun EditProductScreen(
 
             state.selectedProduct != null -> {
                 InputField(
-                    value = state.productTitle.ifEmpty { state.selectedProduct.title },
+                    value = state.productTitle,
                     onValueChange = {
                         viewModel.onAction(UserAction.ProductTitleTyped(it))
                     },
@@ -66,7 +66,7 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.productDesc.ifEmpty { state.selectedProduct.description },
+                    value = state.productDesc,
                     onValueChange = {
                         viewModel.onAction(UserAction.ProductSummaryTyped(it))
                     },
@@ -74,7 +74,7 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.purchasePrice.ifEmpty { state.selectedProduct.purchasePrice },
+                    value = state.purchasePrice,
                     onValueChange = {
                         viewModel.onAction(UserAction.PurchasePriceTyped(it))
                     },
@@ -82,7 +82,7 @@ fun EditProductScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 InputField(
-                    value = state.rentPrice.ifEmpty { state.selectedProduct.rentPrice },
+                    value = state.rentPrice,
                     onValueChange = {
                         viewModel.onAction(UserAction.RentPriceTyped(it))
                     },

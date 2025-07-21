@@ -301,16 +301,18 @@ class ProductsViewModel(
             getProductUseCase(productId).collect { dataResult ->
                 when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update {
-                            it.copy(
+                        _state.update { data ->
+                            data.copy(
                                 isLoading = false,
                                 error = null,
                                 selectedProduct = dataResult.data,
-                                productTitle = "",
-                                productDesc = "",
-                                purchasePrice = "",
-                                rentPrice = "",
-                                selectedCategories = emptyList(),
+                                productTitle = dataResult.data.title,
+                                productDesc = dataResult.data.description,
+                                purchasePrice = dataResult.data.purchasePrice,
+                                rentPrice = dataResult.data.rentPrice,
+                                selectedCategories = dataResult.data.categories.mapNotNull { categoryString ->
+                                    _state.value.categories.find { it.value == categoryString }
+                                },
                                 selectedRentalOption = null
                             )
                         }
