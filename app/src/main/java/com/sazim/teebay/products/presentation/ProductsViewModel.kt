@@ -313,7 +313,7 @@ class ProductsViewModel(
                                 selectedCategories = dataResult.data.categories.mapNotNull { categoryString ->
                                     _state.value.categories.find { it.value == categoryString }
                                 },
-                                selectedRentalOption = null
+                                selectedRentalOption = RentOption.entries.find { it.apiValue == dataResult.data.rentOption }
                             )
                         }
                     }
