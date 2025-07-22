@@ -99,4 +99,32 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             requestBody = productRentRequest,
             transform = { it.toDomain() }
         )
+
+    override suspend fun getBoughtProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
+        makeApiRequest<List<ProductDto>, List<Product>>(
+            method = HttpMethod.Get,
+            endpoint = "transactions/purchases/",
+            transform = { it.filter { productDto -> productDto.buyer == userId }.map { it.toDomain() } }
+        )
+
+    override suspend fun getSoldProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
+        makeApiRequest<List<ProductDto>, List<Product>>(
+            method = HttpMethod.Get,
+            endpoint = "transactions/purchases/",
+            transform = { it.filter { productDto -> productDto.seller == userId }.map { it.toDomain() } }
+        )
+
+    override suspend fun getBorrowedProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
+        makeApiRequest<List<ProductDto>, List<Product>>(
+            method = HttpMethod.Get,
+            endpoint = "transactions/rentals/",
+            transform = { it.filter { productDto -> productDto.renter == userId }.map { it.toDomain() } }
+        )
+
+    override suspend fun getLentProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
+        makeApiRequest<List<ProductDto>, List<Product>>(
+            method = HttpMethod.Get,
+            endpoint = "transactions/rentals/",
+            transform = { it.filter { productDto -> productDto.lender == userId }.map { it.toDomain() } }
+        )
 }

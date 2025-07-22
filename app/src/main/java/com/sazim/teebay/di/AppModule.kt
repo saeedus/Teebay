@@ -29,12 +29,20 @@ import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetProductUseCase
 import com.sazim.teebay.products.domain.usecase.ProductRentUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
+import com.sazim.teebay.products.domain.usecase.GetBoughtProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetBorrowedProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetLentProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetSoldProductsUseCase
 
 val appModule = module {
     //ViewModels
     viewModel { AuthViewModel(get(), get(), get()) }
     viewModel {
         ProductsViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
             get(),
             get(),
             get(),
@@ -76,6 +84,10 @@ val appModule = module {
     factory { UpdateProductUseCase(get()) }
     factory { BuyProductUseCase(get()) }
     factory { ProductRentUseCase(get()) }
+    factory { GetBoughtProductsUseCase(get()) }
+    factory { GetSoldProductsUseCase(get()) }
+    factory { GetBorrowedProductsUseCase(get()) }
+    factory { GetLentProductsUseCase(get()) }
 
     //biometric manager
     factory { BiometricAuthManager(get()) }

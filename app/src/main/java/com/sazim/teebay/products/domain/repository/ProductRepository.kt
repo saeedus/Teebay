@@ -20,4 +20,8 @@ interface ProductRepository {
     suspend fun updateProduct(id: Int, formData: MultiPartFormDataContent): Flow<DataResult<Product, DataError.Network>>
     suspend fun buyProduct(buyerId: Int, productId: Int): Flow<DataResult<ProductBuyResponse, DataError.Network>>
     suspend fun rentProduct(productRentRequest: ProductRentRequest): Flow<DataResult<ProductRentResponse, DataError.Network>>
+    suspend fun getBoughtProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>>
+    suspend fun getSoldProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>>
+    suspend fun getBorrowedProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>>
+    suspend fun getLentProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>>
 }

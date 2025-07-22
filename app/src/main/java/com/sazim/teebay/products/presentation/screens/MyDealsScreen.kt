@@ -13,6 +13,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import com.sazim.teebay.R
+import com.sazim.teebay.products.presentation.components.ProductList
+import androidx.compose.runtime.LaunchedEffect
+import com.sazim.teebay.products.presentation.ProductsState
+import com.sazim.teebay.products.presentation.ProductsViewModel
+import com.sazim.teebay.products.presentation.UserAction
 import kotlinx.coroutines.launch
 
 sealed class MyDealsTab(val title: String) {
@@ -23,7 +28,17 @@ sealed class MyDealsTab(val title: String) {
 }
 
 @Composable
-fun MyDealsScreen(modifier: Modifier = Modifier) {
+fun MyDealsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ProductsViewModel,
+    state: ProductsState
+) {
+    LaunchedEffect(Unit) {
+        viewModel.onAction(UserAction.FetchBoughtProducts)
+        viewModel.onAction(UserAction.FetchSoldProducts)
+        viewModel.onAction(UserAction.FetchBorrowedProducts)
+        viewModel.onAction(UserAction.FetchLentProducts)
+    }
     val tabs = listOf(MyDealsTab.Bought, MyDealsTab.Sold, MyDealsTab.Borrowed, MyDealsTab.Lent)
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
@@ -54,19 +69,19 @@ fun MyDealsScreen(modifier: Modifier = Modifier) {
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
             when (tabs[page]) {
                 MyDealsTab.Bought -> {
-                    Text("Bought", style = MaterialTheme.typography.headlineMedium)
+                    ProductList(products = state.boughtProducts)
                 }
 
                 MyDealsTab.Sold -> {
-                    Text("Sold", style = MaterialTheme.typography.headlineMedium)
+                    ProductList(products = state.soldProducts)
                 }
 
                 MyDealsTab.Borrowed -> {
-                    Text("Borrowed", style = MaterialTheme.typography.headlineMedium)
+                    ProductList(products = state.borrowedProducts)
                 }
 
                 MyDealsTab.Lent -> {
-                    Text("Lent", style = MaterialTheme.typography.headlineMedium)
+                    ProductList(products = state.lentProducts)
                 }
             }
         }

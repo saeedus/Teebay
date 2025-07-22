@@ -20,6 +20,10 @@ import com.sazim.teebay.products.domain.usecase.GetProductUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
 import com.sazim.teebay.products.domain.usecase.BuyProductUseCase
 import com.sazim.teebay.products.domain.usecase.ProductRentUseCase
+import com.sazim.teebay.products.domain.usecase.GetBoughtProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetSoldProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetBorrowedProductsUseCase
+import com.sazim.teebay.products.domain.usecase.GetLentProductsUseCase
 import com.sazim.teebay.products.domain.utils.RentOption
 import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
@@ -43,7 +47,11 @@ class ProductsViewModel(
     private val getProductUseCase: GetProductUseCase,
     private val updateProductUseCase: UpdateProductUseCase,
     private val buyProductUseCase: BuyProductUseCase,
-    private val productRentUseCase: ProductRentUseCase
+    private val productRentUseCase: ProductRentUseCase,
+    private val getBoughtProductsUseCase: GetBoughtProductsUseCase,
+    private val getSoldProductsUseCase: GetSoldProductsUseCase,
+    private val getBorrowedProductsUseCase: GetBorrowedProductsUseCase,
+    private val getLentProductsUseCase: GetLentProductsUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -164,6 +172,74 @@ class ProductsViewModel(
             }
 
             is UserAction.RentProduct -> rentProduct(action.from, action.to)
+            UserAction.FetchBoughtProducts -> getBoughtProducts()
+            UserAction.FetchSoldProducts -> getSoldProducts()
+            UserAction.FetchBorrowedProducts -> getBorrowedProducts()
+            UserAction.FetchLentProducts -> getLentProducts()
+        }
+    }
+
+    private fun getBoughtProducts() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getBoughtProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null, boughtProducts = dataResult.data) }
+                    }
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getSoldProducts() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getSoldProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null, soldProducts = dataResult.data) }
+                    }
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                    }
+                    }
+                }
+            }
+        }
+
+    private fun getBorrowedProducts() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getBorrowedProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null, borrowedProducts = dataResult.data) }
+                    }
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getLentProducts() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            getLentProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null, lentProducts = dataResult.data) }
+                    }
+                    is DataResult.Error -> {
+                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                    }
+                }
+            }
         }
     }
 
