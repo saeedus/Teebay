@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.core.data.repository
 
+import android.util.Log
 import com.sazim.teebay.core.data.remote.ApiConfig
 import com.sazim.teebay.core.data.remote.safeCall
 import com.sazim.teebay.core.domain.DataError
@@ -69,13 +70,18 @@ abstract class BaseRepository(
                     }
                 }
 
-                when (method) {
-                    HttpMethod.Get -> httpClient.get(requestBuilder).body()
-                    HttpMethod.Post -> httpClient.post(requestBuilder).body()
-                    HttpMethod.Put -> httpClient.put(requestBuilder).body()
-                    HttpMethod.Patch -> httpClient.patch(requestBuilder).body()
-                    HttpMethod.Delete -> httpClient.delete(requestBuilder).body()
-                    else -> throw IllegalArgumentException("Unsupported HTTP method: $method")
+                try {
+                    when (method) {
+                        HttpMethod.Get -> httpClient.get(requestBuilder).body()
+                        HttpMethod.Post -> httpClient.post(requestBuilder).body()
+                        HttpMethod.Put -> httpClient.put(requestBuilder).body()
+                        HttpMethod.Patch -> httpClient.patch(requestBuilder).body()
+                        HttpMethod.Delete -> httpClient.delete(requestBuilder).body()
+                        else -> throw IllegalArgumentException("Unsupported HTTP method: $method")
+                    }
+                } catch (e: Exception) {
+                    Log.e("BaseRepository", "Error in API call", e)
+                    throw e
                 }
             }.map { dto: T ->
                 transform(dto)
