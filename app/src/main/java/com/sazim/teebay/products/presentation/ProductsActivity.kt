@@ -60,6 +60,10 @@ class ProductsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
+            val productId = intent.getStringExtra("product_id")
+            val startDestination = intent.getStringExtra("start_destination")
+                ?: ProductNavRoutes.MyProductsScreen.route
+
             val viewModel = koinViewModel<ProductsViewModel>()
             val state by viewModel.state.collectAsState()
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -264,9 +268,10 @@ class ProductsActivity : ComponentActivity() {
                 ) { innerPadding ->
                     ProductNavGraph(
                         navController = navController,
-                        startDestination = ProductNavRoutes.MyProductsScreen,
+                        startDestination = startDestination,
                         viewModel = viewModel,
                         state = state,
+                        productsId = productId?.toInt(),
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

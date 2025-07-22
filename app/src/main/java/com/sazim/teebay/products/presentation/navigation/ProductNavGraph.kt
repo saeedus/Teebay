@@ -27,13 +27,14 @@ import com.sazim.teebay.products.presentation.screens.ProductDetailScreen
 fun ProductNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: ProductNavRoutes,
+    startDestination: String,
     viewModel: ProductsViewModel,
-    state: ProductsState
+    state: ProductsState,
+    productsId: Int? = null
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination.route
+        startDestination = startDestination
     ) {
         composable(route = ProductNavRoutes.MyProductsScreen.route) {
             MyProductsScreen(modifier = modifier, state = state, viewModel = viewModel)
@@ -54,7 +55,12 @@ fun ProductNavGraph(
         composable(
             route = ProductNavRoutes.ProductDetailScreen.route
         ) {
-            ProductDetailScreen(modifier = modifier, viewModel = viewModel, state = state)
+            ProductDetailScreen(
+                modifier = modifier,
+                viewModel = viewModel,
+                state = state,
+                productId = productsId
+            )
         }
 
         composable(route = ProductNavRoutes.AddProductCategoryScreen.route) {

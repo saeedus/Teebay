@@ -11,6 +11,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.sazim.teebay.R
 import com.sazim.teebay.products.presentation.ProductsActivity
+import com.sazim.teebay.products.presentation.navigation.ProductNavRoutes
 
 class PushNotificationService : FirebaseMessagingService() {
 
@@ -40,7 +41,11 @@ class PushNotificationService : FirebaseMessagingService() {
         remoteMessage.notification?.let { notification ->
             Log.d("FCM", "Message Notification Body: ${notification.body}")
             if (remoteMessage.data["product_id"] == null) {
-                sendNotification(notification.title ?: "Teebay Notification", notification.body ?: "You have a new notification from Teebay.", null)
+                sendNotification(
+                    notification.title ?: "Teebay Notification",
+                    notification.body ?: "You have a new notification from Teebay.",
+                    null
+                )
             }
         }
     }
@@ -50,6 +55,7 @@ class PushNotificationService : FirebaseMessagingService() {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (productId != null) {
                 putExtra("product_id", productId)
+                putExtra("start_destination", ProductNavRoutes.ProductDetailScreen.route)
             }
         }
         val pendingIntent = PendingIntent.getActivity(
@@ -58,7 +64,8 @@ class PushNotificationService : FirebaseMessagingService() {
         )
 
         val channelId = "Teebay_Notifications"
-        val defaultSoundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
+        val defaultSoundUri =
+            android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
