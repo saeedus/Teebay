@@ -16,6 +16,7 @@ import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetProductUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
+import com.sazim.teebay.products.domain.usecase.BuyProductUseCase
 import com.sazim.teebay.products.domain.utils.RentOption
 import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
@@ -37,7 +38,8 @@ class ProductsViewModel(
     private val categoryUseCase: GetCategoriesUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val getProductUseCase: GetProductUseCase,
-    private val updateProductUseCase: UpdateProductUseCase
+    private val updateProductUseCase: UpdateProductUseCase,
+    private val buyProductUseCase: BuyProductUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -147,6 +149,7 @@ class ProductsViewModel(
 
             is UserAction.FetchProduct -> fetchProduct(action.productId)
             UserAction.UpdateProduct -> updateProduct()
+            is UserAction.BuyProduct -> buyProduct()
             is UserAction.ViewedProductFromAllProducts -> {
                 _state.update {
                     it.copy(selectedProduct = action.product)
@@ -386,6 +389,33 @@ class ProductsViewModel(
                                     error = dataResult.error.toString()
                                 )
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun buyProduct() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            buyProductUseCase(
+                sessionManager.getUserId() ?: -1,
+                _state.value.selectedProduct?.id ?: -1
+            ).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
+                        _uiEvent.send(ShowToast("Product purchased successfully"))
+                        _uiEvent.send(NavigateToAllProductScreen)
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
                         }
                     }
                 }

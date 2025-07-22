@@ -54,7 +54,9 @@ fun ProductDetailScreen(
         Text(text = "Details: ${state.productDesc}", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /* Handle Buy */ }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = {
+            viewModel.onAction(UserAction.BuyProduct)
+        }, modifier = Modifier.fillMaxWidth()) {
             Text("Buy")
         }
         Spacer(modifier = Modifier.height(8.dp))

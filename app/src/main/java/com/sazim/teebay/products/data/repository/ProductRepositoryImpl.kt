@@ -9,11 +9,14 @@ import com.sazim.teebay.core.data.repository.BaseRepository
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.products.data.dto.CategoryDto
+import com.sazim.teebay.products.data.dto.ProductBuyResponseDto
 import com.sazim.teebay.products.data.dto.ProductDto
 import com.sazim.teebay.products.data.utils.toDomain
+import com.sazim.teebay.products.domain.model.BuyProductRequest
 import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
+import com.sazim.teebay.products.domain.model.ProductBuyResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.http.HttpMethod
@@ -74,4 +77,15 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         requestBody = formData,
         transform = { it.toDomain() }
     )
+
+    override suspend fun buyProduct(
+        buyerId: Int,
+        productId: Int
+    ): Flow<DataResult<ProductBuyResponse, DataError.Network>> =
+        makeApiRequest<ProductBuyResponseDto, ProductBuyResponse>(
+            method = HttpMethod.Post,
+            endpoint = "transactions/purchases/",
+            requestBody = BuyProductRequest(buyerId, productId),
+            transform = { it.toDomain() }
+        )
 }

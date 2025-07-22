@@ -4,6 +4,7 @@ import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.model.Product
+import com.sazim.teebay.products.domain.model.ProductBuyResponse
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import kotlinx.coroutines.flow.Flow
 
@@ -15,4 +16,5 @@ interface ProductRepository {
     suspend fun deleteProduct(id: Int): Flow<DataResult<Unit, DataError.Network>>
     suspend fun getProduct(id: Int): Flow<DataResult<Product, DataError.Network>>
     suspend fun updateProduct(id: Int, formData: MultiPartFormDataContent): Flow<DataResult<Product, DataError.Network>>
+    suspend fun buyProduct(buyerId: Int, productId: Int): Flow<DataResult<ProductBuyResponse, DataError.Network>>
 }

@@ -35,4 +35,5 @@ sealed interface UserAction {
     data class ProductSelected(val product: Product) : UserAction
     data class FetchProduct(val productId: Int) : UserAction
     data object UpdateProduct : UserAction
+    data object BuyProduct : UserAction
 }
