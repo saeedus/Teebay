@@ -35,15 +35,18 @@ fun MyDealsScreen(
     viewModel: ProductsViewModel,
     state: ProductsState
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.onAction(UserAction.FetchBoughtProducts)
-        viewModel.onAction(UserAction.FetchSoldProducts)
-        viewModel.onAction(UserAction.FetchBorrowedProducts)
-        viewModel.onAction(UserAction.FetchLentProducts)
-    }
     val tabs = listOf(MyDealsTab.Bought, MyDealsTab.Sold, MyDealsTab.Borrowed, MyDealsTab.Lent)
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.currentPage) {
+        when (tabs[pagerState.currentPage]) {
+            MyDealsTab.Bought -> viewModel.onAction(UserAction.FetchBoughtProducts)
+            MyDealsTab.Sold -> viewModel.onAction(UserAction.FetchSoldProducts)
+            MyDealsTab.Borrowed -> viewModel.onAction(UserAction.FetchBorrowedProducts)
+            MyDealsTab.Lent -> viewModel.onAction(UserAction.FetchLentProducts)
+        }
+    }
 
     Column(modifier = modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = pagerState.currentPage) {
@@ -69,37 +72,15 @@ fun MyDealsScreen(
         }
 
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
-            when (tabs[page]) {
-                MyDealsTab.Bought -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(state.boughtProducts) {
-                            ProductCard(product = it)
-                        }
-                    }
-                }
-
-                MyDealsTab.Sold -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(state.soldProducts) {
-                            ProductCard(product = it)
-                        }
-                    }
-                }
-
-                MyDealsTab.Borrowed -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(state.borrowedProducts) {
-                            ProductCard(product = it)
-                        }
-                    }
-                }
-
-                MyDealsTab.Lent -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(state.lentProducts) {
-                            ProductCard(product = it)
-                        }
-                    }
+            val products = when (tabs[page]) {
+                MyDealsTab.Bought -> state.boughtProducts
+                MyDealsTab.Sold -> state.soldProducts
+                MyDealsTab.Borrowed -> state.borrowedProducts
+                MyDealsTab.Lent -> state.lentProducts
+            }
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(products) { product ->
+                    ProductCard(product = product)
                 }
             }
         }
