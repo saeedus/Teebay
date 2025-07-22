@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProductRentResponseDto(
+data class RentalDto(
     val id: Int,
     val renter: Int,
     val seller: Int,

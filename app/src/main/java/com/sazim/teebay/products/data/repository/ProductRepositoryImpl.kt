@@ -9,9 +9,9 @@ import com.sazim.teebay.core.data.repository.BaseRepository
 import com.sazim.teebay.core.domain.DataError
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.products.data.dto.CategoryDto
-import com.sazim.teebay.products.data.dto.ProductBuyResponseDto
+import com.sazim.teebay.products.data.dto.PurchaseDto
 import com.sazim.teebay.products.data.dto.ProductDto
-import com.sazim.teebay.products.data.dto.ProductRentResponseDto
+import com.sazim.teebay.products.data.dto.RentalDto
 import com.sazim.teebay.products.data.utils.toDomain
 import com.sazim.teebay.products.domain.model.BuyProductRequest
 import com.sazim.teebay.products.domain.model.Category
@@ -24,6 +24,13 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
 class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
     BaseRepository(apiConfig, httpClient),
@@ -85,7 +92,7 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         buyerId: Int,
         productId: Int
     ): Flow<DataResult<ProductBuyResponse, DataError.Network>> =
-        makeApiRequest<ProductBuyResponseDto, ProductBuyResponse>(
+        makeApiRequest<PurchaseDto, ProductBuyResponse>(
             method = HttpMethod.Post,
             endpoint = "transactions/purchases/",
             requestBody = BuyProductRequest(buyerId, productId),
@@ -93,7 +100,7 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         )
 
     override suspend fun rentProduct(productRentRequest: ProductRentRequest): Flow<DataResult<ProductRentResponse, DataError.Network>> =
-        makeApiRequest<ProductRentResponseDto, ProductRentResponse>(
+        makeApiRequest<RentalDto, ProductRentResponse>(
             method = HttpMethod.Post,
             endpoint = "transactions/rentals/",
             requestBody = productRentRequest,
@@ -101,30 +108,164 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
         )
 
     override suspend fun getBoughtProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
-        makeApiRequest<List<ProductDto>, List<Product>>(
-            method = HttpMethod.Get,
-            endpoint = "transactions/purchases/",
-            transform = { it.filter { productDto -> productDto.buyer == userId }.map { it.toDomain() } }
-        )
+        flow {
+            val purchaseResult = makeApiRequest<List<PurchaseDto>, List<PurchaseDto>>(
+                method = HttpMethod.Get,
+                endpoint = "transactions/purchases/",
+                transform = { it }
+            ).firstOrNull()
+
+            when (purchaseResult) {
+                is DataResult.Success -> {
+                    val boughtProductIds = purchaseResult.data
+                        .filter { it.buyer == userId }
+                        .map { it.product }
+
+                    val semaphore = Semaphore(permits = 10)
+
+                    val products = coroutineScope {
+                        boughtProductIds.map { productId ->
+                            async {
+                                semaphore.withPermit {
+                                    makeApiRequest<ProductDto, Product>(
+                                        method = HttpMethod.Get,
+                                        endpoint = "products/$productId/",
+                                        transform = { it.toDomain() }
+                                    ).firstOrNull()
+                                }
+                            }
+                        }.awaitAll()
+                            .mapNotNull { result -> (result as? DataResult.Success)?.data }
+                    }
+
+                    emit(DataResult.Success(products))
+                }
+
+                is DataResult.Error -> emit(DataResult.Error(purchaseResult.error))
+                null -> emit(DataResult.Error(DataError.Network.UNKNOWN))
+            }
+        }
+
 
     override suspend fun getSoldProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
-        makeApiRequest<List<ProductDto>, List<Product>>(
-            method = HttpMethod.Get,
-            endpoint = "transactions/purchases/",
-            transform = { it.filter { productDto -> productDto.seller == userId }.map { it.toDomain() } }
-        )
+        flow {
+            val purchaseResult = makeApiRequest<List<PurchaseDto>, List<PurchaseDto>>(
+                method = HttpMethod.Get,
+                endpoint = "transactions/purchases/",
+                transform = { it }
+            ).firstOrNull()
+
+            when (purchaseResult) {
+                is DataResult.Success -> {
+                    val soldProductIds = purchaseResult.data
+                        .filter { it.seller == userId }
+                        .map { it.product }
+                        .distinct()
+
+                    val semaphore = Semaphore(permits = 10)
+
+                    val products = coroutineScope {
+                        soldProductIds.map { productId ->
+                            async {
+                                semaphore.withPermit {
+                                    makeApiRequest<ProductDto, Product>(
+                                        method = HttpMethod.Get,
+                                        endpoint = "products/$productId/",
+                                        transform = { it.toDomain() }
+                                    ).firstOrNull()
+                                }
+                            }
+                        }.awaitAll()
+                            .mapNotNull { result -> (result as? DataResult.Success)?.data }
+                    }
+
+                    emit(DataResult.Success(products))
+                }
+
+                is DataResult.Error -> emit(DataResult.Error(purchaseResult.error))
+                null -> emit(DataResult.Error(DataError.Network.UNKNOWN))
+            }
+        }
+
 
     override suspend fun getBorrowedProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
-        makeApiRequest<List<ProductDto>, List<Product>>(
-            method = HttpMethod.Get,
-            endpoint = "transactions/rentals/",
-            transform = { it.filter { productDto -> productDto.renter == userId }.map { it.toDomain() } }
-        )
+        flow {
+            val rentalResult = makeApiRequest<List<RentalDto>, List<RentalDto>>(
+                method = HttpMethod.Get,
+                endpoint = "transactions/rentals/",
+                transform = { it }
+            ).firstOrNull()
+
+            when (rentalResult) {
+                is DataResult.Success -> {
+                    val borrowedProductIds = rentalResult.data
+                        .filter { it.renter == userId }
+                        .map { it.product }
+                        .distinct()
+
+                    val semaphore = Semaphore(permits = 10)
+
+                    val products = coroutineScope {
+                        borrowedProductIds.map { productId ->
+                            async {
+                                semaphore.withPermit {
+                                    makeApiRequest<ProductDto, Product>(
+                                        method = HttpMethod.Get,
+                                        endpoint = "products/$productId/",
+                                        transform = { it.toDomain() }
+                                    ).firstOrNull()
+                                }
+                            }
+                        }.awaitAll()
+                            .mapNotNull { result -> (result as? DataResult.Success)?.data }
+                    }
+
+                    emit(DataResult.Success(products))
+                }
+
+                is DataResult.Error -> emit(DataResult.Error(rentalResult.error))
+                null -> emit(DataResult.Error(DataError.Network.UNKNOWN))
+            }
+        }
+
 
     override suspend fun getLentProducts(userId: Int): Flow<DataResult<List<Product>, DataError.Network>> =
-        makeApiRequest<List<ProductDto>, List<Product>>(
-            method = HttpMethod.Get,
-            endpoint = "transactions/rentals/",
-            transform = { it.filter { productDto -> productDto.lender == userId }.map { it.toDomain() } }
-        )
+        flow {
+            val rentalResult = makeApiRequest<List<RentalDto>, List<RentalDto>>(
+                method = HttpMethod.Get,
+                endpoint = "transactions/rentals/",
+                transform = { it }
+            ).firstOrNull()
+
+            when (rentalResult) {
+                is DataResult.Success -> {
+                    val lentProductIds = rentalResult.data
+                        .filter { it.renter == userId }
+                        .map { it.product }
+                        .distinct()
+
+                    val semaphore = Semaphore(permits = 10)
+
+                    val products = coroutineScope {
+                        lentProductIds.map { productId ->
+                            async {
+                                semaphore.withPermit {
+                                    makeApiRequest<ProductDto, Product>(
+                                        method = HttpMethod.Get,
+                                        endpoint = "products/$productId/",
+                                        transform = { it.toDomain() }
+                                    ).firstOrNull()
+                                }
+                            }
+                        }.awaitAll()
+                            .mapNotNull { result -> (result as? DataResult.Success)?.data }
+                    }
+
+                    emit(DataResult.Success(products))
+                }
+
+                is DataResult.Error -> emit(DataResult.Error(rentalResult.error))
+                null -> emit(DataResult.Error(DataError.Network.UNKNOWN))
+            }
+        }
 }

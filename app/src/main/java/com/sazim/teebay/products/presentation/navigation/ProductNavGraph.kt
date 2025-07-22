@@ -90,7 +90,7 @@ fun ProductNavGraph(
         }
 
         composable(route = ProductNavRoutes.MyDealsScreen.route) {
-            MyDealsScreen(modifier = modifier)
+            MyDealsScreen(modifier = modifier, viewModel = viewModel, state = state)
         }
 
     }
