@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
+import com.sazim.teebay.core.utils.toIso8601String
 import com.sazim.teebay.products.domain.model.ProductRentRequest
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.DeleteProductUseCase
@@ -174,8 +175,8 @@ class ProductsViewModel(
                     renter = sessionManager.getUserId() ?: -1,
                     product = _state.value.selectedProduct?.id ?: -1,
                     rentOption = _state.value.selectedProduct?.rentOption.orEmpty(),
-                    rentPeriodStartDate = from.toString(),
-                    rentPeriodEndDate = to.toString()
+                    rentPeriodStartDate = from.toIso8601String(),
+                    rentPeriodEndDate = to.toIso8601String()
                 )
             ).collect { dataResult ->
                 when (dataResult) {
