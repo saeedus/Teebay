@@ -4,6 +4,7 @@
 
 package com.sazim.teebay.products.data.utils
 
+import com.sazim.teebay.core.utils.toFormattedDate
 import com.sazim.teebay.products.data.dto.CategoryDto
 import com.sazim.teebay.products.data.dto.PurchaseDto
 import com.sazim.teebay.products.data.dto.ProductDto
@@ -25,7 +26,7 @@ fun ProductDto.toDomain(): Product {
         purchasePrice = purchasePrice,
         rentPrice = rentPrice,
         rentOption = rentOption,
-        datePosted = datePosted
+        datePosted = datePosted.toFormattedDate()
     )
 }
 
@@ -42,7 +43,7 @@ fun PurchaseDto.toDomain(): ProductBuyResponse {
         buyerId = buyer,
         sellerId = seller,
         productId = product,
-        purchaseDate = purchaseDate
+        purchaseDate = purchaseDate.toFormattedDate()
 
     )
 }
@@ -57,6 +58,6 @@ fun RentalDto.toDomain(): ProductRentResponse {
         rentPeriodStartDate = rentPeriodStartDate,
         rentPeriodEndDate = rentPeriodEndDate,
         totalPrice = totalPrice,
-        rentDate = rentDate
+        rentDate = rentDate.toFormattedDate()
     )
 }
