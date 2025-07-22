@@ -13,7 +13,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import com.sazim.teebay.R
-import com.sazim.teebay.products.presentation.components.ProductList
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import com.sazim.teebay.products.presentation.components.ProductCard
 import androidx.compose.runtime.LaunchedEffect
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
@@ -69,19 +71,35 @@ fun MyDealsScreen(
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
             when (tabs[page]) {
                 MyDealsTab.Bought -> {
-                    ProductList(products = state.boughtProducts)
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(state.boughtProducts) {
+                            ProductCard(product = it)
+                        }
+                    }
                 }
 
                 MyDealsTab.Sold -> {
-                    ProductList(products = state.soldProducts)
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(state.soldProducts) {
+                            ProductCard(product = it)
+                        }
+                    }
                 }
 
                 MyDealsTab.Borrowed -> {
-                    ProductList(products = state.borrowedProducts)
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(state.borrowedProducts) {
+                            ProductCard(product = it)
+                        }
+                    }
                 }
 
                 MyDealsTab.Lent -> {
-                    ProductList(products = state.lentProducts)
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(state.lentProducts) {
+                            ProductCard(product = it)
+                        }
+                    }
                 }
             }
         }
