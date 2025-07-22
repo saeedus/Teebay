@@ -11,12 +11,15 @@ import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.products.data.dto.CategoryDto
 import com.sazim.teebay.products.data.dto.ProductBuyResponseDto
 import com.sazim.teebay.products.data.dto.ProductDto
+import com.sazim.teebay.products.data.dto.ProductRentResponseDto
 import com.sazim.teebay.products.data.utils.toDomain
 import com.sazim.teebay.products.domain.model.BuyProductRequest
 import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.repository.ProductRepository
 import com.sazim.teebay.products.domain.model.Product
 import com.sazim.teebay.products.domain.model.ProductBuyResponse
+import com.sazim.teebay.products.domain.model.ProductRentRequest
+import com.sazim.teebay.products.domain.model.ProductRentResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.http.HttpMethod
@@ -86,6 +89,14 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             method = HttpMethod.Post,
             endpoint = "transactions/purchases/",
             requestBody = BuyProductRequest(buyerId, productId),
+            transform = { it.toDomain() }
+        )
+
+    override suspend fun rentProduct(productRentRequest: ProductRentRequest): Flow<DataResult<ProductRentResponse, DataError.Network>> =
+        makeApiRequest<ProductRentResponseDto, ProductRentResponse>(
+            method = HttpMethod.Post,
+            endpoint = "transactions/rentals/",
+            requestBody = productRentRequest,
             transform = { it.toDomain() }
         )
 }

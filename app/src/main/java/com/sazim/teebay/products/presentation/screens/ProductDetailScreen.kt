@@ -60,7 +60,7 @@ fun ProductDetailScreen(
             Text("Buy")
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { /* Handle Rent */ }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { viewModel.onAction(UserAction.RentProduct)}, modifier = Modifier.fillMaxWidth()) {
             Text("Rent")
         }
     }

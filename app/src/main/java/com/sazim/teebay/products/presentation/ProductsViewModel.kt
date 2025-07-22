@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.sazim.teebay.auth.domain.local.SessionManager
 import com.sazim.teebay.core.domain.DataResult
 import com.sazim.teebay.core.presentation.BiometricAuthManager
+import com.sazim.teebay.products.domain.model.ProductRentRequest
 import com.sazim.teebay.products.domain.usecase.AddProductUseCase
 import com.sazim.teebay.products.domain.usecase.DeleteProductUseCase
 import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
@@ -17,6 +18,7 @@ import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetProductUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
 import com.sazim.teebay.products.domain.usecase.BuyProductUseCase
+import com.sazim.teebay.products.domain.usecase.ProductRentUseCase
 import com.sazim.teebay.products.domain.utils.RentOption
 import com.sazim.teebay.products.presentation.ProductsEvents.*
 import kotlinx.coroutines.channels.Channel
@@ -39,7 +41,8 @@ class ProductsViewModel(
     private val deleteProductUseCase: DeleteProductUseCase,
     private val getProductUseCase: GetProductUseCase,
     private val updateProductUseCase: UpdateProductUseCase,
-    private val buyProductUseCase: BuyProductUseCase
+    private val buyProductUseCase: BuyProductUseCase,
+    private val productRentUseCase: ProductRentUseCase
 ) : ViewModel() {
 
     private val _state =
@@ -158,6 +161,40 @@ class ProductsViewModel(
                     _uiEvent.send(NavigateToProductDetailScreen)
                 }
             }
+
+            UserAction.RentProduct -> rentProduct()
+        }
+    }
+
+    private fun rentProduct() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            productRentUseCase(
+                productRentRequest = ProductRentRequest(
+                    renter = sessionManager.getUserId() ?: -1,
+                    product = _state.value.selectedProduct?.id ?: -1,
+                    rentOption = _state.value.selectedProduct?.rentOption.orEmpty(),
+                    rentPeriodStartDate = "", //TODO
+                    rentPeriodEndDate = "" //TODO
+                )
+            ).collect { dataResult ->
+                when (dataResult) {
+                    is DataResult.Success -> {
+                        _state.update { it.copy(isLoading = false, error = null) }
+                        _uiEvent.send(ShowToast("Product rented successfully"))
+                        _uiEvent.send(NavigateToAllProductScreen)
+                    }
+
+                    is DataResult.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -166,7 +203,8 @@ class ProductsViewModel(
             val isEnabled = sessionManager.isBiometricLoginEnabled()
             sessionManager.setBiometricLoginEnabled(!isEnabled)
             _state.update { it.copy(isBiometricEnabled = !isEnabled) }
-            val message = if (!isEnabled) "Biometric login enabled" else "Biometric login disabled"
+            val message =
+                if (!isEnabled) "Biometric login enabled" else "Biometric login disabled"
             viewModelScope.launch {
                 _uiEvent.send(ShowToast(message))
             }

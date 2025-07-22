@@ -7,9 +7,11 @@ package com.sazim.teebay.products.data.utils
 import com.sazim.teebay.products.data.dto.CategoryDto
 import com.sazim.teebay.products.data.dto.ProductBuyResponseDto
 import com.sazim.teebay.products.data.dto.ProductDto
+import com.sazim.teebay.products.data.dto.ProductRentResponseDto
 import com.sazim.teebay.products.domain.model.Category
 import com.sazim.teebay.products.domain.model.Product
 import com.sazim.teebay.products.domain.model.ProductBuyResponse
+import com.sazim.teebay.products.domain.model.ProductRentResponse
 
 
 fun ProductDto.toDomain(): Product {
@@ -42,5 +44,19 @@ fun ProductBuyResponseDto.toDomain(): ProductBuyResponse {
         productId = product,
         purchaseDate = purchaseDate
 
+    )
+}
+
+fun ProductRentResponseDto.toDomain(): ProductRentResponse {
+    return ProductRentResponse(
+        id = id,
+        renterId = renter,
+        sellerId = seller,
+        productId = product,
+        rentOption = rentOption,
+        rentPeriodStartDate = rentPeriodStartDate,
+        rentPeriodEndDate = rentPeriodEndDate,
+        totalPrice = totalPrice,
+        rentDate = rentDate
     )
 }

@@ -27,6 +27,7 @@ import com.sazim.teebay.products.domain.usecase.GetAllProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetCategoriesUseCase
 import com.sazim.teebay.products.domain.usecase.GetMyProductsUseCase
 import com.sazim.teebay.products.domain.usecase.GetProductUseCase
+import com.sazim.teebay.products.domain.usecase.ProductRentUseCase
 import com.sazim.teebay.products.domain.usecase.UpdateProductUseCase
 
 val appModule = module {
@@ -73,6 +74,7 @@ val appModule = module {
     factory { GetProductUseCase(get()) }
     factory { UpdateProductUseCase(get()) }
     factory { BuyProductUseCase(get()) }
+    factory { ProductRentUseCase(get()) }
 
     //biometric manager
     factory { BiometricAuthManager(get()) }
