@@ -41,10 +41,10 @@ fun MyDealsScreen(
 
     LaunchedEffect(pagerState.currentPage) {
         when (tabs[pagerState.currentPage]) {
-            MyDealsTab.Bought -> viewModel.onAction(UserAction.FetchBoughtProducts)
-            MyDealsTab.Sold -> viewModel.onAction(UserAction.FetchSoldProducts)
-            MyDealsTab.Borrowed -> viewModel.onAction(UserAction.FetchBorrowedProducts)
-            MyDealsTab.Lent -> viewModel.onAction(UserAction.FetchLentProducts)
+            MyDealsTab.Bought -> if (state.boughtProducts.isEmpty()) viewModel.onAction(UserAction.FetchBoughtProducts)
+            MyDealsTab.Sold -> if (state.soldProducts.isEmpty()) viewModel.onAction(UserAction.FetchSoldProducts)
+            MyDealsTab.Borrowed -> if (state.borrowedProducts.isEmpty()) viewModel.onAction(UserAction.FetchBorrowedProducts)
+            MyDealsTab.Lent -> if (state.lentProducts.isEmpty()) viewModel.onAction(UserAction.FetchLentProducts)
         }
     }
 
