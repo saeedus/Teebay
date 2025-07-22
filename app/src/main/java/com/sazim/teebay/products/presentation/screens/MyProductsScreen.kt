@@ -39,6 +39,7 @@ fun MyProductsScreen(
 
     LaunchedEffect(Unit) {
         viewModel.onAction(UserAction.FetchMyProducts)
+        viewModel.onAction(UserAction.ClearSelectedProduct)
     }
 
     if (showDialog) {

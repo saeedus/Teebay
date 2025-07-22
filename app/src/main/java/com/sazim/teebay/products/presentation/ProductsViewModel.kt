@@ -176,6 +176,7 @@ class ProductsViewModel(
             UserAction.FetchSoldProducts -> getSoldProducts()
             UserAction.FetchBorrowedProducts -> getBorrowedProducts()
             UserAction.FetchLentProducts -> getLentProducts()
+            UserAction.ClearSelectedProduct -> clearProduct()
         }
     }
 
@@ -185,10 +186,22 @@ class ProductsViewModel(
             getBoughtProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
                 when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update { it.copy(isLoading = false, error = null, boughtProducts = dataResult.data) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                boughtProducts = dataResult.data
+                            )
+                        }
                     }
+
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
                     }
                 }
             }
@@ -201,15 +214,27 @@ class ProductsViewModel(
             getSoldProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
                 when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update { it.copy(isLoading = false, error = null, soldProducts = dataResult.data) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                soldProducts = dataResult.data
+                            )
+                        }
                     }
+
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
-                    }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
                     }
                 }
             }
         }
+    }
 
     private fun getBorrowedProducts() {
         _state.update { it.copy(isLoading = true) }
@@ -217,10 +242,22 @@ class ProductsViewModel(
             getBorrowedProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
                 when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update { it.copy(isLoading = false, error = null, borrowedProducts = dataResult.data) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                borrowedProducts = dataResult.data
+                            )
+                        }
                     }
+
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
                     }
                 }
             }
@@ -233,10 +270,22 @@ class ProductsViewModel(
             getLentProductsUseCase(sessionManager.getUserId() ?: -1).collect { dataResult ->
                 when (dataResult) {
                     is DataResult.Success -> {
-                        _state.update { it.copy(isLoading = false, error = null, lentProducts = dataResult.data) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                lentProducts = dataResult.data
+                            )
+                        }
                     }
+
                     is DataResult.Error -> {
-                        _state.update { it.copy(isLoading = false, error = dataResult.error.toString()) }
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                error = dataResult.error.toString()
+                            )
+                        }
                     }
                 }
             }
@@ -455,6 +504,19 @@ class ProductsViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun clearProduct() {
+        _state.update {
+            it.copy(
+                productTitle = "",
+                productDesc = "",
+                purchasePrice = "",
+                rentPrice = "",
+                selectedCategories = emptyList(),
+                selectedRentalOption = null
+            )
         }
     }
 
