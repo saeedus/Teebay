@@ -162,11 +162,11 @@ class ProductsViewModel(
                 }
             }
 
-            UserAction.RentProduct -> rentProduct()
+            is UserAction.RentProduct -> rentProduct(action.from, action.to)
         }
     }
 
-    private fun rentProduct() {
+    private fun rentProduct(from: Long, to: Long) {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             productRentUseCase(
@@ -174,8 +174,8 @@ class ProductsViewModel(
                     renter = sessionManager.getUserId() ?: -1,
                     product = _state.value.selectedProduct?.id ?: -1,
                     rentOption = _state.value.selectedProduct?.rentOption.orEmpty(),
-                    rentPeriodStartDate = "", //TODO
-                    rentPeriodEndDate = "" //TODO
+                    rentPeriodStartDate = from.toString(),
+                    rentPeriodEndDate = to.toString()
                 )
             ).collect { dataResult ->
                 when (dataResult) {

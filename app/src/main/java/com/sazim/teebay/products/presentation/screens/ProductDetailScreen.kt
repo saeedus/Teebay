@@ -10,6 +10,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +27,17 @@ fun ProductDetailScreen(
     viewModel: ProductsViewModel,
     state: ProductsState
 ) {
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    if (showDatePicker) {
+        RentalPeriodDialog(
+            onDismiss = { showDatePicker = false },
+            onConfirm = { from, to ->
+                viewModel.onAction(UserAction.RentProduct(from, to))
+                showDatePicker = false
+            }
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.onAction(UserAction.FetchCategories)
@@ -60,7 +75,7 @@ fun ProductDetailScreen(
             Text("Buy")
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { viewModel.onAction(UserAction.RentProduct)}, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { showDatePicker = true }, modifier = Modifier.fillMaxWidth()) {
             Text("Rent")
         }
     }
