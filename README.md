@@ -78,3 +78,8 @@ project.
     * For the `prod` flavor: `./gradlew installProdDebug`
 
 4. Once installed, you can find and launch the **Teebay** app from the app drawer on your device.
+
+## Demo Video
+
+A demo video of the Teebay application is available on Google Drive:
+[Teebay Demo Video](https://drive.google.com/drive/folders/1-2OwQQu47W_FDDgss0y82RRJSMb0pIow?usp=sharing)
