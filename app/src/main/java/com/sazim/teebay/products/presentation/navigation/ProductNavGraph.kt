@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.sazim.teebay.products.presentation.ProductsState
 import com.sazim.teebay.products.presentation.ProductsViewModel
 import com.sazim.teebay.products.presentation.screens.AddProductCategoryScreen
@@ -30,7 +32,6 @@ fun ProductNavGraph(
     startDestination: String,
     viewModel: ProductsViewModel,
     state: ProductsState,
-    productsId: Int? = null
 ) {
     NavHost(
         navController = navController,
@@ -53,13 +54,17 @@ fun ProductNavGraph(
         }
 
         composable(
-            route = ProductNavRoutes.ProductDetailScreen.route
+            route = ProductNavRoutes.ProductDetailScreen.route + "?productId={productId}",
+            arguments = listOf(navArgument("productId") {
+                type = NavType.IntType
+                defaultValue = -1
+            })
         ) {
             ProductDetailScreen(
                 modifier = modifier,
                 viewModel = viewModel,
                 state = state,
-                productId = productsId
+                productId = if (it.arguments?.getInt("productId") == -1) null else it.arguments?.getInt("productId")
             )
         }
 

@@ -55,7 +55,7 @@ class PushNotificationService : FirebaseMessagingService() {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (productId != null) {
                 putExtra("product_id", productId)
-                putExtra("start_destination", ProductNavRoutes.ProductDetailScreen.route)
+                putExtra("start_destination", ProductNavRoutes.ProductDetailScreen.createRoute(productId.toInt()))
             }
         }
         val pendingIntent = PendingIntent.getActivity(

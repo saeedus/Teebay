@@ -15,5 +15,7 @@ sealed class ProductNavRoutes(val route: String) {
     data object AddProductSummaryScreen : ProductNavRoutes("add_product_summary")
     data object EditProductScreen : ProductNavRoutes("edit_product")
     data object MyDealsScreen : ProductNavRoutes("my_deals")
-    data object ProductDetailScreen : ProductNavRoutes("product_details")
+    data object ProductDetailScreen : ProductNavRoutes("product_details") {
+        fun createRoute(productId: Int) = "product_details?productId=$productId"
+    }
 }

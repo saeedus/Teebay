@@ -271,7 +271,6 @@ class ProductsActivity : ComponentActivity() {
                         startDestination = startDestination,
                         viewModel = viewModel,
                         state = state,
-                        productsId = productId?.toInt(),
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
