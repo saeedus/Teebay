@@ -60,7 +60,6 @@ class ProductsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            val productId = intent.getStringExtra("product_id")
             val startDestination = intent.getStringExtra("start_destination")
                 ?: ProductNavRoutes.MyProductsScreen.route
 
