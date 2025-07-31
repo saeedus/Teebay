@@ -30,11 +30,27 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val viewModel = koinViewModel<AuthViewModel>()
-            val state by viewModel.state.collectAsState()
+            val signInViewModel = koinViewModel<SignInViewModel>()
+            val signUpViewModel = koinViewModel<SignUpViewModel>()
+            val signInState by signInViewModel.state.collectAsState()
+            val signUpState by signUpViewModel.state.collectAsState()
 
             LaunchedEffect(Unit) {
-                viewModel.uiEvent.collect { event ->
+                signInViewModel.uiEvent.collect { event ->
+                    when (event) {
+                        AuthEvents.NavigateToMyProducts -> {
+                            navigateToProducts()
+                        }
+
+                        AuthEvents.ShowBiometricPrompt -> {
+                            showBiometricPrompt { navigateToProducts() }
+                        }
+                    }
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                signUpViewModel.uiEvent.collect { event ->
                     when (event) {
                         AuthEvents.NavigateToMyProducts -> {
                             navigateToProducts()
@@ -51,8 +67,10 @@ class AuthActivity : AppCompatActivity() {
                 AuthNavGraph(
                     navController = rememberNavController(),
                     startDestination = AuthNavRoutes.AuthScreen,
-                    authViewModel = viewModel,
-                    authState = state,
+                    signInViewModel = signInViewModel,
+                    signUpViewModel = signUpViewModel,
+                    signInState = signInState,
+                    signUpState = signUpState,
                     modifier = Modifier.padding(innerPadding)
                 )
             }

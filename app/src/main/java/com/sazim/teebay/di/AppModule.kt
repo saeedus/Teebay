@@ -4,7 +4,8 @@ import com.sazim.teebay.auth.data.FcmTokenProvider
 import com.sazim.teebay.auth.data.FcmTokenProviderImpl
 import com.sazim.teebay.auth.domain.usecase.LoginUseCase
 import com.sazim.teebay.auth.domain.usecase.SignUpUseCase
-import com.sazim.teebay.auth.presentation.AuthViewModel
+import com.sazim.teebay.auth.presentation.SignInViewModel
+import com.sazim.teebay.auth.presentation.SignUpViewModel
 import com.sazim.teebay.auth.data.local.SessionManagerImpl
 import com.sazim.teebay.core.data.remote.ApiConfig
 import com.sazim.teebay.auth.domain.local.SessionManager
@@ -36,7 +37,8 @@ import com.sazim.teebay.products.domain.usecase.GetSoldProductsUseCase
 
 val appModule = module {
     //ViewModels
-    viewModel { AuthViewModel(get(), get(), get()) }
+    viewModel { SignInViewModel(get(), get()) }
+    viewModel { SignUpViewModel(get(), get()) }
     viewModel {
         ProductsViewModel(
             get(),

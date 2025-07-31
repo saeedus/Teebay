@@ -99,6 +99,8 @@ class ProductRepositoryImpl(apiConfig: ApiConfig, httpClient: HttpClient) :
             transform = { it.toDomain() }
         )
 
+
+
     override suspend fun rentProduct(productRentRequest: ProductRentRequest): Flow<DataResult<ProductRentResponse, DataError.Network>> =
         makeApiRequest<RentalDto, ProductRentResponse>(
             method = HttpMethod.Post,

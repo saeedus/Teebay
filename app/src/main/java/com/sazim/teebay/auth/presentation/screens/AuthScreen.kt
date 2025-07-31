@@ -32,13 +32,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sazim.teebay.R
 import com.sazim.teebay.auth.presentation.AuthState
-import com.sazim.teebay.auth.presentation.AuthViewModel
+import com.sazim.teebay.auth.presentation.SignInViewModel
+import com.sazim.teebay.auth.presentation.SignUpViewModel
 import com.sazim.teebay.auth.presentation.UserAction
 import com.sazim.teebay.auth.presentation.components.AuthPrompt
 import com.sazim.teebay.core.presentation.ui.components.InputField
 
 @Composable
-fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: AuthState) {
+fun AuthScreen(
+    modifier: Modifier = Modifier,
+    signInViewModel: SignInViewModel,
+    signUpViewModel: SignUpViewModel,
+    signInState: AuthState,
+    signUpState: AuthState
+) {
+    val isLogin = signInState.isLogin
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,7 +55,7 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
             .verticalScroll(state = rememberScrollState())
     ) {
         Text(
-            text = stringResource(if (state.isLogin) R.string.sign_in else R.string.sign_up_title),
+            text = stringResource(if (isLogin) R.string.sign_in else R.string.sign_up_title),
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -55,41 +64,45 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (!state.isLogin) {
+        if (!isLogin) {
             InputField(
-                value = state.firstName,
-                onValueChange = { viewModel.onAction(UserAction.OnFirstNameTyped(it)) },
+                value = signUpState.firstName,
+                onValueChange = { signUpViewModel.onAction(UserAction.OnFirstNameTyped(it)) },
                 label = stringResource(id = R.string.first_name),
                 keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
-                value = state.lastName,
-                onValueChange = { viewModel.onAction(UserAction.OnLastNameTyped(it)) },
+                value = signUpState.lastName,
+                onValueChange = { signUpViewModel.onAction(UserAction.OnLastNameTyped(it)) },
                 label = stringResource(id = R.string.last_name),
                 keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
-                value = state.address,
-                onValueChange = { viewModel.onAction(UserAction.OnAddressTyped(it)) },
+                value = signUpState.address,
+                onValueChange = { signUpViewModel.onAction(UserAction.OnAddressTyped(it)) },
                 label = stringResource(id = R.string.address),
                 keyboardType = KeyboardType.Text
             )
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
-                value = state.phoneNumber,
-                onValueChange = { viewModel.onAction(UserAction.OnPhoneNumberTyped(it)) },
+                value = signUpState.phoneNumber,
+                onValueChange = { signUpViewModel.onAction(UserAction.OnPhoneNumberTyped(it)) },
                 label = stringResource(id = R.string.phone_number),
-                keyboardType =KeyboardType.Phone
+                keyboardType = KeyboardType.Phone
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
 
         InputField(
-            value = state.email,
+            value = if (isLogin) signInState.email else signUpState.email,
             onValueChange = {
-                viewModel.onAction(UserAction.OnEmailTyped(email = it))
+                if (isLogin) {
+                    signInViewModel.onAction(UserAction.OnEmailTyped(email = it))
+                } else {
+                    signUpViewModel.onAction(UserAction.OnEmailTyped(email = it))
+                }
             },
             label = stringResource(id = R.string.email),
             keyboardType = KeyboardType.Email
@@ -98,20 +111,24 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         Spacer(modifier = Modifier.height(8.dp))
 
         InputField(
-            value = state.password,
+            value = if (isLogin) signInState.password else signUpState.password,
             onValueChange = {
-                viewModel.onAction(UserAction.OnPasswordTyped(password = it))
+                if (isLogin) {
+                    signInViewModel.onAction(UserAction.OnPasswordTyped(password = it))
+                } else {
+                    signUpViewModel.onAction(UserAction.OnPasswordTyped(password = it))
+                }
             },
             label = stringResource(id = R.string.password),
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )
 
-        if (!state.isLogin) {
+        if (!isLogin) {
             Spacer(modifier = Modifier.height(8.dp))
             InputField(
-                value = state.confirmPassword,
-                onValueChange = { viewModel.onAction(UserAction.OnConfirmPasswordTyped(it)) },
+                value = signUpState.confirmPassword,
+                onValueChange = { signUpViewModel.onAction(UserAction.OnConfirmPasswordTyped(it)) },
                 label = stringResource(id = R.string.confirm_password),
                 keyboardType = KeyboardType.Password,
                 visualTransformation = PasswordVisualTransformation()
@@ -121,7 +138,8 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         Spacer(modifier = Modifier.height(16.dp))
 
 
-        state.errorMessage?.let { message ->
+        val errorMessage = if (isLogin) signInState.errorMessage else signUpState.errorMessage
+        errorMessage?.let { message ->
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.error,
@@ -132,7 +150,8 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
             )
         }
 
-        if (state.isLoading) {
+        val isLoading = if (isLogin) signInState.isLoading else signUpState.isLoading
+        if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(28.dp)
@@ -141,27 +160,27 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         } else {
             Button(
                 onClick = {
-                    if (state.isLogin) {
-                        viewModel.onAction(UserAction.OnSignInTapped)
+                    if (isLogin) {
+                        signInViewModel.onAction(UserAction.OnSignInTapped)
                     } else {
-                        viewModel.onAction(UserAction.OnSignUpTapped)
+                        signUpViewModel.onAction(UserAction.OnSignUpTapped)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = stringResource(if (state.isLogin) R.string.login else R.string.sign_up))
+                Text(text = stringResource(if (isLogin) R.string.login else R.string.sign_up))
             }
         }
 
         Spacer(Modifier.height(20.dp))
 
-        if (state.shouldShowBiometricPrompt) {
+        if (signInState.shouldShowBiometricPrompt) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(8.dp)
             ) {
                 IconButton(onClick = {
-                    viewModel.onAction(UserAction.ShowBiometricPrompt)
+                    signInViewModel.onAction(UserAction.ShowBiometricPrompt)
                 }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_fingerprint),
@@ -179,13 +198,13 @@ fun AuthScreen(modifier: Modifier = Modifier, viewModel: AuthViewModel, state: A
         }
 
         AuthPrompt(
-            promptText = stringResource(if (state.isLogin) R.string.dont_have_account else R.string.already_have_account),
-            actionText = stringResource(if (state.isLogin) R.string.sign_up else R.string.sign_in)
+            promptText = stringResource(if (isLogin) R.string.dont_have_account else R.string.already_have_account),
+            actionText = stringResource(if (isLogin) R.string.sign_up else R.string.sign_in)
         ) {
-            if (state.isLogin) {
-                viewModel.onAction(UserAction.ShowSignUpForm)
+            if (isLogin) {
+                signInViewModel.onAction(UserAction.ShowSignUpForm)
             } else {
-                viewModel.onAction(UserAction.ShowSignInForm)
+                signInViewModel.onAction(UserAction.ShowSignInForm)
             }
         }
     }

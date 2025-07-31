@@ -10,7 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sazim.teebay.auth.presentation.AuthState
-import com.sazim.teebay.auth.presentation.AuthViewModel
+import com.sazim.teebay.auth.presentation.SignInViewModel
+import com.sazim.teebay.auth.presentation.SignUpViewModel
 import com.sazim.teebay.auth.presentation.screens.AuthScreen
 
 @Composable
@@ -18,15 +19,23 @@ fun AuthNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestination: AuthNavRoutes,
-    authViewModel: AuthViewModel,
-    authState: AuthState
+    signInViewModel: SignInViewModel,
+    signUpViewModel: SignUpViewModel,
+    signInState: AuthState,
+    signUpState: AuthState
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination.route
     ) {
         composable(route = AuthNavRoutes.AuthScreen.route) {
-            AuthScreen(modifier = modifier, state = authState, viewModel = authViewModel)
+            AuthScreen(
+                modifier = modifier,
+                signInState = signInState,
+                signUpState = signUpState,
+                signInViewModel = signInViewModel,
+                signUpViewModel = signUpViewModel
+            )
         }
     }
 }
